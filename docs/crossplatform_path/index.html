@@ -1,16 +1,16 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="crossplatform_path"><title>crossplatform_path - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="crossplatform_path" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../static.files/storage-4e99c027.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../crossplatform_path/index.html">crossplatform_<wbr>path</a><span class="version">0.0.17</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#crossplatform_path" title="crossplatform_path">crossplatform_path</a><ul><li><a href="#motivation" title="Motivation">Motivation</a></li><li><a href="#opinionated-to-the-max" title="Opinionated to the max">Opinionated to the max</a></li><li><a href="#development-details" title="Development details">Development details</a></li><li><a href="#releases-changelog" title="Releases changelog">Releases changelog</a></li><li><a href="#todo" title="TODO">TODO</a></li><li><a href="#open-source-and-free-as-a-beer" title="Open-source and free as a beer">Open-source and free as a beer</a></li></ul></li></ul><h3><a href="#enums">Crate Items</a></h3><ul class="block"><li><a href="#enums" title="Enums">Enums</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>crossplatform_path</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/crossplatform_path/lib.rs.html#10-107">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="crossplatform_path"><a class="doc-anchor" href="#crossplatform_path">§</a>crossplatform_path</h2>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="crossplatform_path"><title>crossplatform_path - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="crossplatform_path" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../static.files/storage-4e99c027.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../crossplatform_path/index.html">crossplatform_<wbr>path</a><span class="version">0.0.30</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#crossplatform_path" title="crossplatform_path">crossplatform_path</a><ul><li><a href="#motivation" title="Motivation">Motivation</a></li><li><a href="#opinionated-to-the-max" title="Opinionated to the max">Opinionated to the max</a></li><li><a href="#development-details" title="Development details">Development details</a></li><li><a href="#releases-changelog" title="Releases changelog">Releases changelog</a></li><li><a href="#todo" title="TODO">TODO</a></li><li><a href="#open-source-and-free-as-a-beer" title="Open-source and free as a beer">Open-source and free as a beer</a></li></ul></li></ul><h3><a href="#structs">Crate Items</a></h3><ul class="block"><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#enums" title="Enums">Enums</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>crossplatform_path</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/crossplatform_path/lib.rs.html#10-299">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="crossplatform_path"><a class="doc-anchor" href="#crossplatform_path">§</a>crossplatform_path</h2>
 <p><strong>Crossplatform Path Rust library</strong><br />
-<em><strong>version: 0.0.17 date: 2025-09-22 author: <a href="https://bestia.dev">bestia.dev</a> repository: <a href="https://github.com/bestia-dev/crossplatform_path">GitHub</a></strong></em></p>
+<em><strong>version: 0.0.30 date: 2025-09-22 author: <a href="https://bestia.dev">bestia.dev</a> repository: <a href="https://github.com/bestia-dev/crossplatform_path">GitHub</a></strong></em></p>
 <p><img src="https://img.shields.io/badge/maintained-green" alt="maintained" />
 <img src="https://img.shields.io/badge/work_in_progress-yellow" alt="work-in-progress" />
 <img src="https://img.shields.io/badge/rustlang-orange" alt="rustlang" /></p>
 <p><a href="https://github.com/bestia-dev/crossplatform_path/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License" /></a>
 <a href="https://github.com/bestia-dev/crossplatform_path/"><img src="https://github.com/bestia-dev/crossplatform_path/workflows/rust_fmt_auto_build_test/badge.svg" alt="Rust" /></a></p>
-<p><a href="https://github.com/bestia-dev/crossplatform_path/"><img src="https://img.shields.io/badge/Lines_in_Rust-12-green.svg" alt="Lines in Rust code" /></a>
-<a href="https://github.com/bestia-dev/crossplatform_path/"><img src="https://img.shields.io/badge/Lines_in_Doc_comments-85-blue.svg" alt="Lines in Doc comments" /></a>
-<a href="https://github.com/bestia-dev/crossplatform_path/"><img src="https://img.shields.io/badge/Lines_in_comments-10-purple.svg" alt="Lines in Comments" /></a>
-<a href="https://github.com/bestia-dev/crossplatform_path/"><img src="https://img.shields.io/badge/Lines_in_examples-22-yellow.svg" alt="Lines in examples" /></a>
-<a href="https://github.com/bestia-dev/crossplatform_path/"><img src="https://img.shields.io/badge/Lines_in_tests-0-orange.svg" alt="Lines in tests" /></a></p>
+<p><a href="https://github.com/bestia-dev/crossplatform_path/"><img src="https://img.shields.io/badge/Lines_in_Rust-52-green.svg" alt="Lines in Rust code" /></a>
+<a href="https://github.com/bestia-dev/crossplatform_path/"><img src="https://img.shields.io/badge/Lines_in_Doc_comments-102-blue.svg" alt="Lines in Doc comments" /></a>
+<a href="https://github.com/bestia-dev/crossplatform_path/"><img src="https://img.shields.io/badge/Lines_in_comments-33-purple.svg" alt="Lines in Comments" /></a>
+<a href="https://github.com/bestia-dev/crossplatform_path/"><img src="https://img.shields.io/badge/Lines_in_examples-23-yellow.svg" alt="Lines in examples" /></a>
+<a href="https://github.com/bestia-dev/crossplatform_path/"><img src="https://img.shields.io/badge/Lines_in_tests-160-orange.svg" alt="Lines in tests" /></a></p>
 <p>Hashtags: #maintained #ready-for-use #rustlang #automation #workflow<br />
 My projects on GitHub are more like a tutorial than a finished product: <a href="https://github.com/bestia-dev/tutorials_rust_wasm">bestia-dev tutorials</a>.</p>
 <h3 id="motivation"><a class="doc-anchor" href="#motivation">§</a>Motivation</h3>
@@ -30,31 +30,36 @@ My projects on GitHub are more like a tutorial than a finished product: <a href=
 <p>The only path separator will be the universal ‘/’. If some ‘\’ exists, it will be replaced by ‘/’. Linux allows the use of ‘\’ inside a filename, but my opinion is that this is bad and should be avoided.</p>
 </li>
 <li>
-<p>Linux is very permissive. Only NULL and ‘/’ are forbidden in path components. But it is a good idea to not allow special characters forbidden on Windows:<br />
-&lt; &gt; : “ / \ | ? *<br />
-0 (NULL byte)<br />
-0-31 (ASCII control characters)</p>
-</li>
+<p>Linux is very permissive. Only NULL and ‘/’ are forbidden in path components. But it is a good idea to not allow special characters forbidden on Windows:</p>
+<div class="example-wrap"><pre class="language-text"><code>&lt; &gt; : &quot; / \\ | ? *
+0 (NULL byte)
+0-31 (ASCII control characters)  </code></pre></div></li>
 <li>
 <p>Filenames cannot end in a space or dot.</p>
 </li>
 <li>
-<p>Not allow reserved filenames even with extensions:
+<p>Not allow reserved filenames even with extensions and foldernames:
 CON, PRN, AUX, NUL<br />
 COM1, COM2, COM3, COM4, COM5, COM6, COM7, COM8, COM9<br />
 LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, LPT9<br />
+These names are not really needed and will not be allowed:
 .  (special name referring to current directory)<br />
+This have to be avoided because of traversal attacks:
 .. (special name referring to parent directory)</p>
 </li>
 <li>
-<p>Instead of the problematic Windows ‘c:’ or ‘d:’ drives, the neutral crossplatform format will be ‘/mnt/c’ or ‘/mnt/d’</p>
+<p>Instead of the problematic Windows ‘c:’ or ‘d:’ drives, the neutral crossplatform format will be ‘/mnt/c’ or ‘/mnt/d’<br />
+On Windows:
+/mnt/c/ will be transformed into c:\<br />
+/mnt/d/ will be transformed into d:\</p>
 </li>
 <li>
-<p>This special symbols are allowed and will be transformed for Windows:<br />
-‘~’    will be transformed into %UserProfile%
-/tmp   will be transformed into %TEMP%
-/mnt/c/ will be transformed into c:\
-/mnt/d/ will be transformed into d:\</p>
+<p>This special symbols and root folders are allowed and will be transformed for Windows:<br />
+‘~’    will be transformed into %UserProfile%<br />
+/tmp   will be transformed into %TEMP%</p>
+</li>
+<li>
+<p>Definitely some paths in one OS have absolutely no meaning in other OS, but these have to be avoided manually.</p>
 </li>
 </ol>
 <h3 id="development-details"><a class="doc-anchor" href="#development-details">§</a>Development details</h3>
@@ -64,7 +69,8 @@ LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, LPT9<br />
 <p>Read the releases changelog in a separate md file:
 <a href="RELEASES.md">RELEASES.md</a></p>
 <h3 id="todo"><a class="doc-anchor" href="#todo">§</a>TODO</h3>
-<p>And code happily ever after…</p>
+<p>Change panics into proper library errors.
+And code happily ever after…</p>
 <h3 id="open-source-and-free-as-a-beer"><a class="doc-anchor" href="#open-source-and-free-as-a-beer">§</a>Open-source and free as a beer</h3>
 <p>My open-source projects are free as a beer (MIT license).<br />
 I just love programming.<br />
@@ -76,4 +82,4 @@ So I can drink a free beer for your health :-)<br />
 <a href="https://github.com/bestia-dev">//github.com/bestia-dev</a><br />
 <a href="https://bestiadev.substack.com">//bestiadev.substack.com</a><br />
 <a href="https://youtube.com/@bestia-dev-tutorials">//youtube.com/@bestia-dev-tutorials</a></p>
-</div></details><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><dl class="item-table"><dt><a class="enum" href="enum.LibraryError.html" title="enum crossplatform_path::LibraryError">Library<wbr>Error</a></dt><dd>all possible library errors for <code>thiserror</code></dd></dl></section></div></main></body></html>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><dl class="item-table"><dt><a class="struct" href="struct.CrossPathBuf.html" title="struct crossplatform_path::CrossPathBuf">Cross<wbr>Path<wbr>Buf</a></dt></dl><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><dl class="item-table"><dt><a class="enum" href="enum.LibraryError.html" title="enum crossplatform_path::LibraryError">Library<wbr>Error</a></dt><dd>all possible library errors for <code>thiserror</code></dd></dl></section></div></main></body></html>

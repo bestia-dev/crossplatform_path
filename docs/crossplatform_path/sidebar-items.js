@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["LibraryError"]};
+window.SIDEBAR_ITEMS = {"enum":["LibraryError"],"struct":["CrossPathBuf"]};
