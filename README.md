@@ -6,7 +6,7 @@
 [//]: # (auto_cargo_toml_to_md start)
 
 **Crossplatform Path Rust library**  
-***version: 0.0.16 date: 2025-09-22 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+***version: 0.0.17 date: 2025-09-22 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 
  ![maintained](https://img.shields.io/badge/maintained-green)
  ![work-in-progress](https://img.shields.io/badge/work_in_progress-yellow)
@@ -18,11 +18,11 @@
   [![Rust](https://github.com/bestia-dev/crossplatform_path/workflows/rust_fmt_auto_build_test/badge.svg)](https://github.com/bestia-dev/crossplatform_path/)
 
 [//]: # (auto_lines_of_code start)
-[![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-12-green.svg)]()
-[![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-64-blue.svg)]()
-[![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-10-purple.svg)]()
-[![Lines in examples](https://img.shields.io/badge/Lines_in_examples-22-yellow.svg)]()
-[![Lines in tests](https://img.shields.io/badge/Lines_in_tests-0-orange.svg)]()
+[![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-12-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-85-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-10-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in examples](https://img.shields.io/badge/Lines_in_examples-22-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in tests](https://img.shields.io/badge/Lines_in_tests-0-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
 
 [//]: # (auto_lines_of_code end)
 
@@ -43,9 +43,9 @@ My opinions are probably not useful for all developers, but they work for me and
 
 1. The path will be strictly utf8. I know that there exists a rare possibility of the path being in some other strange format, but I will never encounter that with this library. Or at least, I will always avoid that.
 2. Unix and Linux have paths that look nice. Windows is the problem here. The crossplatform format will be very much like the Linux paths.
-3. The only path separator will be the universal '/'. If some '\' exists, it will be replaced by '/'. Linux allows the use of '\' inside a filename, but my opinion is that this is bad and should be avoided.
+3. The only path separator will be the universal '/'. If some '\\' exists, it will be replaced by '/'. Linux allows the use of '\\' inside a filename, but my opinion is that this is bad and should be avoided.
 4. Linux is very permissive. Only NULL and '/' are forbidden in path components. But it is a good idea to not allow special characters forbidden on Windows:  
-< > : " / \ | ? *  
+< > : " / \\ | ? *  
 0 (NULL byte)  
 0-31 (ASCII control characters)  
 5. Filenames cannot end in a space or dot.
@@ -60,8 +60,8 @@ LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, LPT9
 8. This special symbols are allowed and will be transformed for Windows:  
 '~'    will be transformed into %UserProfile%
 /tmp   will be transformed into %TEMP%
-/mnt/c/ will be transformed into c:\
-/mnt/d/ will be transformed into d:\
+/mnt/c/ will be transformed into c:\\
+/mnt/d/ will be transformed into d:\\
 
 ## Development details
 
