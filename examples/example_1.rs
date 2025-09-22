@@ -3,6 +3,7 @@
 //! A simple example how to use the `lib.rs`
 //! You can run it with `cargo run --example example_1`
 
+#[allow(unused_imports)]
 use crossplatform_path::*;
 
 // ANSI colors for Linux terminal

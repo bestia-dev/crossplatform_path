@@ -12,6 +12,8 @@ The TODO section is part of the [README.md](https://github.com/bestia-dev/crossp
 
 - backslash is always a problem
 
+- struct impl
+
 ## Version 0.0.1
 
 - Rust project created with `cargo auto new_cli crossplatform_path bestia-dev`

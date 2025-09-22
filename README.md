@@ -6,23 +6,23 @@
 [//]: # (auto_cargo_toml_to_md start)
 
 **Crossplatform Path Rust library**  
-***version: 0.0.17 date: 2025-09-22 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+***version: 0.0.30 date: 2025-09-22 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 
  ![maintained](https://img.shields.io/badge/maintained-green)
  ![work-in-progress](https://img.shields.io/badge/work_in_progress-yellow)
  ![rustlang](https://img.shields.io/badge/rustlang-orange)
 
 [//]: # (auto_cargo_toml_to_md end)
- 
+
   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/bestia-dev/crossplatform_path/blob/main/LICENSE)
   [![Rust](https://github.com/bestia-dev/crossplatform_path/workflows/rust_fmt_auto_build_test/badge.svg)](https://github.com/bestia-dev/crossplatform_path/)
 
 [//]: # (auto_lines_of_code start)
-[![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-12-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
-[![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-85-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
-[![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-10-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
-[![Lines in examples](https://img.shields.io/badge/Lines_in_examples-22-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
-[![Lines in tests](https://img.shields.io/badge/Lines_in_tests-0-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-52-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-102-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-33-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in examples](https://img.shields.io/badge/Lines_in_examples-23-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in tests](https://img.shields.io/badge/Lines_in_tests-160-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
 
 [//]: # (auto_lines_of_code end)
 
@@ -45,23 +45,31 @@ My opinions are probably not useful for all developers, but they work for me and
 2. Unix and Linux have paths that look nice. Windows is the problem here. The crossplatform format will be very much like the Linux paths.
 3. The only path separator will be the universal '/'. If some '\\' exists, it will be replaced by '/'. Linux allows the use of '\\' inside a filename, but my opinion is that this is bad and should be avoided.
 4. Linux is very permissive. Only NULL and '/' are forbidden in path components. But it is a good idea to not allow special characters forbidden on Windows:  
-< > : " / \\ | ? *  
-0 (NULL byte)  
-0-31 (ASCII control characters)  
+
+    ```text
+    < > : " / \\ | ? *
+    0 (NULL byte)
+    0-31 (ASCII control characters)  
+    ```
+  
 5. Filenames cannot end in a space or dot.
-6. Not allow reserved filenames even with extensions:
-CON, PRN, AUX, NUL  
-COM1, COM2, COM3, COM4, COM5, COM6, COM7, COM8, COM9  
-LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, LPT9  
-.  (special name referring to current directory)  
-.. (special name referring to parent directory)  
+6. Not allow reserved filenames even with extensions and foldernames:
+   CON, PRN, AUX, NUL  
+   COM1, COM2, COM3, COM4, COM5, COM6, COM7, COM8, COM9  
+   LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, LPT9  
+   These names are not really needed and will not be allowed:
+   .  (special name referring to current directory)  
+   This have to be avoided because of traversal attacks:
+   .. (special name referring to parent directory)  
 
 7. Instead of the problematic Windows 'c:' or 'd:' drives, the neutral crossplatform format will be '/mnt/c' or '/mnt/d'  
-8. This special symbols are allowed and will be transformed for Windows:  
-'~'    will be transformed into %UserProfile%
-/tmp   will be transformed into %TEMP%
-/mnt/c/ will be transformed into c:\\
-/mnt/d/ will be transformed into d:\\
+   On Windows:
+   /mnt/c/ will be transformed into c:\\  
+   /mnt/d/ will be transformed into d:\\  
+8. This special symbols and root folders are allowed and will be transformed for Windows:  
+   '~'    will be transformed into %UserProfile%  
+   /tmp   will be transformed into %TEMP%  
+9. Definitely some paths in one OS have absolutely no meaning in other OS, but these have to be avoided manually.
 
 ## Development details
 
@@ -75,6 +83,7 @@ Read the releases changelog in a separate md file:
 
 ## TODO
 
+Change panics into proper library errors.
 And code happily ever after...
 
 ## Open-source and free as a beer
