@@ -1,0 +1,9 @@
+(function() {
+    var implementors = Object.fromEntries([["crossplatform_path",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.89.0/core/marker/trait.Sync.html\" title=\"trait core::marker::Sync\">Sync</a> for <a class=\"enum\" href=\"crossplatform_path/enum.LibraryError.html\" title=\"enum crossplatform_path::LibraryError\">LibraryError</a>",1,["crossplatform_path::LibraryError"]]]]]);
+    if (window.register_implementors) {
+        window.register_implementors(implementors);
+    } else {
+        window.pending_implementors = implementors;
+    }
+})()
+//{"start":57,"fragment_lengths":[343]}

@@ -1,0 +1,1 @@
+searchState.loadedDescShard("crossplatform_path", 0, "crossplatform_path\nall possible library errors for <code>thiserror</code>\nReturns the argument unchanged.\nCalls <code>U::from(self)</code>.")
