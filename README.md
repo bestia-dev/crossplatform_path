@@ -27,7 +27,7 @@
 
 [//]: # (auto_lines_of_code end)
 
-Hashtags: #maintained #work-in-progress #rustlang
+Hashtags: #maintained #work-in-progress #rustlang  
 My projects on GitHub are more like a tutorial than a finished product: [bestia-dev tutorials](https://github.com/bestia-dev/tutorials_rust_wasm).  
 
 ## Motivation

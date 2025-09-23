@@ -66,8 +66,6 @@ pub fn task_publish_to_crates_io() -> String {
   {YELLOW}After `cargo auto publish_to_crates_io`, check in browser{RESET}
 {GREEN}https://crates.io/crates/{package_name}{RESET}
   {YELLOW}Install the crate with{RESET}
-{GREEN}cargo install {package_name}{RESET}
-  {YELLOW}and check how it works.{RESET}
 "#
     );
     tag_name_version
