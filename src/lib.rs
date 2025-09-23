@@ -4,7 +4,7 @@
 //! # crossplatform_path
 //!
 //! **Crossplatform Path Rust library**  
-//! ***version: 1.0.3 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+//! ***version: 1.0.5 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 //!
 //!  ![maintained](https://img.shields.io/badge/maintained-green)
 //!  ![work-in-progress](https://img.shields.io/badge/work_in_progress-yellow)
@@ -15,7 +15,7 @@
 //!   ![crossplatform_path](https://bestia.dev/webpage_hit_counter/get_svg_image/1320456497.svg)
 //!
 //! [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-58-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-146-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-149-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //! [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-28-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //! [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-23-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-182-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
@@ -131,6 +131,7 @@ pub enum LibraryError {
 /// if starts with windows c: or d: it is converted to /mnt/c or /mnt/d lowercase  
 #[derive(Clone, Debug, PartialEq)]
 pub struct CrossPathBuf {
+    /// Path stored in a Neutral Crossplatform format.
     cross_path: String,
 }
 
@@ -240,10 +241,10 @@ impl CrossPathBuf {
 
     /// Converts crossplatform path into Windows path.
     ///
-    /// '~'    will be transformed into home
-    /// /mnt/c/ will be transformed into c:\\
-    /// /mnt/d/ will be transformed into d:\\
-    /// /tmp   will be transformed into %TEMP%
+    /// '~'    will be transformed into home  
+    /// /mnt/c/ will be transformed into c:\\  
+    /// /mnt/d/ will be transformed into d:\\  
+    /// /tmp   will be transformed into %TEMP%  
     pub fn to_win_path_buf(&self) -> std::path::PathBuf {
         let mut win_path = self.cross_path.clone();
         // '~'    will be transformed into home
@@ -269,7 +270,7 @@ impl CrossPathBuf {
 
     /// Converts crossplatform path into Linux path.
     ///
-    /// '~'    will be transformed into home
+    /// '~'    will be transformed into home  
     pub fn to_nix_path_buf(&self) -> std::path::PathBuf {
         let mut nix_path = self.cross_path.clone();
         // '~'    will be transformed into home
@@ -284,10 +285,10 @@ impl CrossPathBuf {
 
     /// Converts crossplatform path into current OS path.
     ///
-    /// '~'    will be transformed into home
-    /// /mnt/c/ will be transformed into c:\\
-    /// /mnt/d/ will be transformed into d:\\
-    /// /tmp   will be transformed into %TEMP%
+    /// '~'    will be transformed into home  
+    /// /mnt/c/ will be transformed into c:\\  
+    /// /mnt/d/ will be transformed into d:\\  
+    /// /tmp   will be transformed into %TEMP%  
     pub fn to_current_os_path_buf(&self) -> std::path::PathBuf {
         if cfg!(windows) {
             self.to_win_path_buf()
