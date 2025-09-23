@@ -4,7 +4,7 @@
 //! # crossplatform_path
 //!
 //! **Crossplatform Path Rust library**  
-//! ***version: 1.0.2 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+//! ***version: 1.0.3 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 //!
 //!  ![maintained](https://img.shields.io/badge/maintained-green)
 //!  ![work-in-progress](https://img.shields.io/badge/work_in_progress-yellow)
@@ -12,14 +12,15 @@
 //!
 //!   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/bestia-dev/crossplatform_path/blob/main/LICENSE)
 //!   [![Rust](https://github.com/bestia-dev/crossplatform_path/workflows/rust_fmt_auto_build_test/badge.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//!   ![crossplatform_path](https://bestia.dev/webpage_hit_counter/get_svg_image/1320456497.svg)
 //!
 //! [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-58-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-142-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-146-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //! [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-28-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //! [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-23-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-182-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //!
-//! Hashtags: #maintained #ready-for-use #rustlang #automation #workflow  
+//! Hashtags: #maintained #work-in-progress #rustlang
 //! My projects on GitHub are more like a tutorial than a finished product: [bestia-dev tutorials](https://github.com/bestia-dev/tutorials_rust_wasm).  
 //!
 //! ## Motivation
@@ -46,19 +47,20 @@
 //!     ```
 //!   
 //! 5. Filenames cannot end in a space or dot.
-//! 6. Not allow reserved filenames even with extensions and foldernames:
+//! 6. Not allow reserved filenames even with extensions and foldernames:  
 //!    CON, PRN, AUX, NUL  
 //!    COM1, COM2, COM3, COM4, COM5, COM6, COM7, COM8, COM9  
 //!    LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, LPT9  
-//!    These names are not really needed and will not be allowed:
+//!    These names are not really needed and will not be allowed:  
 //!    .  (special name referring to current directory)  
-//!    This have to be avoided because of traversal attacks:
+//!    This have to be avoided because of traversal attacks:  
 //!    .. (special name referring to parent directory)  
 //!
-//! 7. Instead of the problematic Windows 'c:' or 'd:' drives, the neutral crossplatform format will be '/mnt/c' or '/mnt/d'  
-//!    On Windows:
-//!    /mnt/c/ will be transformed into c:\\  
-//!    /mnt/d/ will be transformed into d:\\  
+//! 7. Instead of the problematic Windows 'c:' or 'd:' drives,  
+//! the neutral crossplatform format will be '/mnt/c' or '/mnt/d'  
+//!    From Windows:  
+//!    c:\\ will be transformed into /mnt/c/  
+//!    d:\\ will be transformed into /mnt/d/  
 //! 8. This special symbols and root folders are allowed and will be transformed for Windows:  
 //!    '~'    will be transformed into %UserProfile%  
 //!    /tmp   will be transformed into %TEMP%  
@@ -101,7 +103,7 @@ mod tests;
 // The `lib.rs` uses the `thiserror` library.
 use thiserror::Error;
 
-/// all possible library errors for `thiserror`
+/// All possible library errors for `thiserror`.
 #[derive(Error, Debug, PartialEq)]
 pub enum LibraryError {
     #[error(r#"The string {0} contains an invalid windows path character < > : " | ? * "#)]
@@ -116,36 +118,37 @@ pub enum LibraryError {
     Unknown,
 }
 
-/// Crossplatform PathBuf stores Path in a Neutral Crossplatform format
+/// CrossPathBuf stores Path in a Neutral Crossplatform format.
 ///
-/// The neutral path is limited to valid utf8 strings.
-/// This format can be stored in config files. It is "similar" to the Linux format, but not exactly equal.
-/// When used for file operations, this Neutral format is converted into Linux or Windows format accordingly.
-/// Some limitations exist for paths mostly because of Windows limitations:
-/// forbidden characters < > : " / \\ | ? *  0 (NULL byte)  0-31 (ASCII control characters)
-/// Filenames cannot end in a space or dot.
-/// separator is always slash. Backslash is replaced. Backslash must never be a part of a name or path component.
-/// must not contain reserved words con, prn, aux, nul, com1-com9, lpt1-lpt9, . and ..
-/// if starts with windows c: or d: it is converted to /mnt/c or /mnt/d lowercase
+/// The neutral path is limited to valid utf8 strings.  
+/// This format can be stored in config files. It is "similar" to the Linux format, but not exactly equal.  
+/// When used for file operations, this Neutral format is converted into Linux or Windows format accordingly.  
+/// Some limitations exist for paths mostly because of Windows limitations:  
+/// forbidden characters < > : " / \\ | ? *  0 (NULL byte)  0-31 (ASCII control characters)  
+/// Filenames cannot end in a space or dot.  
+/// separator is always slash. Backslash is replaced. Backslash must never be a part of a name or path component.  
+/// must not contain reserved words con, prn, aux, nul, com1-com9, lpt1-lpt9, . and ..  
+/// if starts with windows c: or d: it is converted to /mnt/c or /mnt/d lowercase  
 #[derive(Clone, Debug, PartialEq)]
 pub struct CrossPathBuf {
     cross_path: String,
 }
 
 impl CrossPathBuf {
-    /// Create a new CrossPlatform path from a str
-    /// Path must be always utf8. Rust strings are guaranteed to be utf8.
-    /// The input path will be tested that is somehow correct.
-    /// It will be transformed from Windows into the crossplatform format. Linux format will stay mostly the same.
-    /// The neutral path is limited to valid utf8 strings.
-    /// This format can be stored in config files. It is "similar" to the Linux format, but not exactly equal.
-    /// When used for file operations, this Neutral format is converted into Linux or Windows format accordingly.
-    /// Some limitations exist for paths mostly because of Windows limitations:
-    /// forbidden characters < > : " / \\ | ? *  0 (NULL byte)  0-31 (ASCII control characters)
-    /// Filenames cannot end in a space or dot.
-    /// separator is always slash. Backslash is replaced. Backslash must never be a part of a name or path component.
-    /// must not contain reserved words con, prn, aux, nul, com1-com9, lpt1-lpt9, . and ..
-    /// if start with windows c: or d: convert to /mnt/c or /mnt/d lowercase
+    /// Creates a new CrossPathBuf from &str.
+    ///
+    /// Path must be always utf8. Rust strings are guaranteed to be utf8.  
+    /// The input path will be tested that is somehow correct.  
+    /// It will be transformed from Windows into the crossplatform format. Linux format will stay mostly the same.  
+    /// The neutral path is limited to valid utf8 strings.  
+    /// This format can be stored in config files. It is "similar" to the Linux format, but not exactly equal.  
+    /// When used for file operations, this Neutral format is converted into Linux or Windows format accordingly.  
+    /// Some limitations exist for paths mostly because of Windows limitations:  
+    /// forbidden characters < > : " / \\ | ? *  0 (NULL byte)  0-31 (ASCII control characters)  
+    /// Filenames cannot end in a space or dot.  
+    /// separator is always slash. Backslash is replaced. Backslash must never be a part of a name or path component.  
+    /// must not contain reserved words con, prn, aux, nul, com1-com9, lpt1-lpt9, . and ..  
+    /// if start with windows c: or d: convert to /mnt/c or /mnt/d lowercase  
     pub fn new(str_path: &str) -> Result<Self, LibraryError> {
         // forbidden: < > : " / \\ | ? *  0 (NULL byte)  0-31 (ASCII control characters)
         // but : / and \\ are delimiters and can be used in a path fragment with multiple components.
@@ -235,7 +238,8 @@ impl CrossPathBuf {
         Ok(CrossPathBuf { cross_path })
     }
 
-    /// convert crossplatform path into Windows path
+    /// Converts crossplatform path into Windows path.
+    ///
     /// '~'    will be transformed into home
     /// /mnt/c/ will be transformed into c:\\
     /// /mnt/d/ will be transformed into d:\\
@@ -263,7 +267,8 @@ impl CrossPathBuf {
         std::path::PathBuf::from_str(&win_path).expect("PathBuf::from_str() returns Infallible error. Therefore the error cannot occur.")
     }
 
-    /// convert crossplatform path into Linux path
+    /// Converts crossplatform path into Linux path.
+    ///
     /// '~'    will be transformed into home
     pub fn to_nix_path_buf(&self) -> std::path::PathBuf {
         let mut nix_path = self.cross_path.clone();
@@ -277,7 +282,8 @@ impl CrossPathBuf {
         std::path::PathBuf::from_str(&nix_path).expect("PathBuf::from_str() returns Infallible error. Therefore the error cannot occur.")
     }
 
-    /// convert crossplatform path into current OS path
+    /// Converts crossplatform path into current OS path.
+    ///
     /// '~'    will be transformed into home
     /// /mnt/c/ will be transformed into c:\\
     /// /mnt/d/ will be transformed into d:\\
@@ -290,7 +296,7 @@ impl CrossPathBuf {
         }
     }
 
-    /// return as crossplatform str for use in Display and Debug and store into config files
+    /// Returns the crossplatform str for use in Display and store into config files.
     pub fn as_str(&self) -> &str {
         &self.cross_path
     }
@@ -322,10 +328,10 @@ impl CrossPathBuf {
         }
     }
 
-    /// Joins two paths and returns a new CrossPath to allow function chaining
+    /// Joins two paths and returns a new CrossPathBuf to allow function chaining.
     ///
-    /// It works differently from the original Rust join() where if the second path is absolute, it overwrites the first path.
-    /// Here the second path is always relative and is added to the first path
+    /// It works differently from the original Rust join() where if the second path is absolute, it overwrites the first path.  
+    /// Here the second path is always relative and is added to the first path.  
     pub fn join_relative(&self, str_path: &str) -> Result<Self, LibraryError> {
         let second_path = CrossPathBuf::new(str_path)?;
         let cross_path = format!(
@@ -337,17 +343,17 @@ impl CrossPathBuf {
     }
 }
 
-/// display() is used in format!("{}")
+/// Method display() is used in format!("{}").
 impl std::fmt::Display for CrossPathBuf {
-    /// display() is used in format!("{}")
+    /// Method display() is used in format!("{}").
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         std::fmt::Display::fmt(self.as_str(), f)
     }
 }
 
-/// from() and into() are useful in places where PathBuf is needed
+/// CrossPathBuf from() and into() are useful in places where PathBuf is needed.
 impl From<CrossPathBuf> for std::path::PathBuf {
-    /// from() and into() are useful in places where PathBuf is needed
+    /// CrossPathBuf from() and into() are useful in places where PathBuf is needed.
     fn from(cross_path: CrossPathBuf) -> Self {
         cross_path.to_current_os_path_buf()
     }
