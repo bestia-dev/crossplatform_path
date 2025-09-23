@@ -161,14 +161,7 @@ fn task_build() {
     let cargo_toml = crate::build_cli_bin_mod::task_build();
     println!(
         r#"
-  {YELLOW}After `cargo auto build`, run the compiled binary, examples and/or tests{RESET}
-{GREEN}alias {package_name}=target/debug/{package_name}{RESET}
-
-{GREEN}{package_name} print world{RESET}
-  {YELLOW}If ok then{RESET}
-{GREEN}{package_name} upper world{RESET}
-  {YELLOW}If ok then{RESET}
-{GREEN}{package_name} upper WORLD{RESET}
+  {YELLOW}After `cargo auto build`, run examples and/or tests{RESET}
   {YELLOW}if {package_name} ok then{RESET}
 {GREEN}cargo auto release{RESET}
 "#,
@@ -183,14 +176,7 @@ fn task_release() {
 
     println!(
         r#"
-  {YELLOW}After `cargo auto release`, run the compiled binary, examples and/or tests{RESET}
-{GREEN}alias {package_name}=target/release/{package_name}{RESET}
-
-{GREEN}{package_name} print world{RESET}
-  {YELLOW}If ok then{RESET}
-{GREEN}{package_name} upper world{RESET}
-  {YELLOW}If ok then{RESET}
-{GREEN}{package_name} upper WORLD{RESET}
+  {YELLOW}After `cargo auto release`, run examples and/or tests{RESET}
   {YELLOW}if {package_name} ok then{RESET}
 {GREEN}cargo auto doc{RESET}
 "#,
