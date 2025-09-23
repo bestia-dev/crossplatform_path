@@ -14,7 +14,7 @@ keywords = ["maintained", "work-in-progress", "rustlang"]
 # allowed categories are listed here <https://crates.io/category_slugs>
 categories = ["filesystem"]
 # publish as a cargo tool. Only this files.
-publish = false
+publish = true
 include = [
     "Cargo.toml",
     "LICENSE",

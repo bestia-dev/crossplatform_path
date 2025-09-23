@@ -22,6 +22,8 @@ The TODO section is part of the [README.md](https://github.com/bestia-dev/crossp
 
 - docs
 
+- publish true
+
 ## Version 0.0.1
 
 - Rust project created with `cargo auto new_cli crossplatform_path bestia-dev`
