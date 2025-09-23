@@ -4,7 +4,7 @@
 //! # crossplatform_path
 //!
 //! **Crossplatform Path Rust library**  
-//! ***version: 1.0.5 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+//! ***version: 1.0.6 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 //!
 //!  ![maintained](https://img.shields.io/badge/maintained-green)
 //!  ![work-in-progress](https://img.shields.io/badge/work_in_progress-yellow)
@@ -126,9 +126,9 @@ pub enum LibraryError {
 /// Some limitations exist for paths mostly because of Windows limitations:  
 /// forbidden characters < > : " / \\ | ? *  0 (NULL byte)  0-31 (ASCII control characters)  
 /// Filenames cannot end in a space or dot.  
-/// separator is always slash. Backslash is replaced. Backslash must never be a part of a name or path component.  
-/// must not contain reserved words con, prn, aux, nul, com1-com9, lpt1-lpt9, . and ..  
-/// if starts with windows c: or d: it is converted to /mnt/c or /mnt/d lowercase  
+/// Separator is always slash. Backslash is replaced. Backslash must never be a part of a name or path component.  
+/// Must not contain reserved words con, prn, aux, nul, com1-com9, lpt1-lpt9, . and ..  
+/// If starts with windows c: or d: it is converted to /mnt/c or /mnt/d lowercase  
 #[derive(Clone, Debug, PartialEq)]
 pub struct CrossPathBuf {
     /// Path stored in a Neutral Crossplatform format.
@@ -147,9 +147,9 @@ impl CrossPathBuf {
     /// Some limitations exist for paths mostly because of Windows limitations:  
     /// forbidden characters < > : " / \\ | ? *  0 (NULL byte)  0-31 (ASCII control characters)  
     /// Filenames cannot end in a space or dot.  
-    /// separator is always slash. Backslash is replaced. Backslash must never be a part of a name or path component.  
-    /// must not contain reserved words con, prn, aux, nul, com1-com9, lpt1-lpt9, . and ..  
-    /// if start with windows c: or d: convert to /mnt/c or /mnt/d lowercase  
+    /// Separator is always slash. Backslash is replaced. Backslash must never be a part of a name or path component.  
+    /// Must not contain reserved words con, prn, aux, nul, com1-com9, lpt1-lpt9, . and ..  
+    /// If start with windows c: or d: convert to /mnt/c or /mnt/d lowercase  
     pub fn new(str_path: &str) -> Result<Self, LibraryError> {
         // forbidden: < > : " / \\ | ? *  0 (NULL byte)  0-31 (ASCII control characters)
         // but : / and \\ are delimiters and can be used in a path fragment with multiple components.
@@ -175,11 +175,11 @@ impl CrossPathBuf {
             return Err(LibraryError::MustNotEndWith(str_path.to_string()));
         }
 
-        // separator is always slash. Backslash is replaced. Backslash must never be a part of a name or path component.
+        // Separator is always slash. Backslash is replaced. Backslash must never be a part of a name or path component.
         let mut cross_path = str_path.replace(r#"\"#, "/");
 
         // 6. Not allow reserved filenames even with extensions and foldernames:
-        // windows path is case insensitive, so I must check insensitive. I will use to_lowercase.
+        // Windows path is case insensitive, so I must check insensitive. I will use to_lowercase.
         // CON, PRN, AUX, NUL
         // COM1, COM2, COM3, COM4, COM5, COM6, COM7, COM8, COM9
         // LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, LPT9
@@ -217,7 +217,7 @@ impl CrossPathBuf {
             return Err(LibraryError::ReservedWords(str_path.to_string()));
         }
 
-        // if start with windows c: or d: convert to /mnt/c or /mnt/d lowercase
+        // If start with windows c: or d: convert to /mnt/c or /mnt/d lowercase
         let mut iter = cross_path.chars();
         if let Some(first) = iter.next()
             && let Some(second) = iter.next()
@@ -226,12 +226,12 @@ impl CrossPathBuf {
             cross_path = format!("/mnt/{}{}", first.to_lowercase(), iter.as_str());
         }
 
-        // forbidden character, except for windows drive
+        // Forbidden character, except for windows drive
         if cross_path.contains(":") {
             return Err(LibraryError::InvalidCharacter(cross_path));
         }
 
-        // forbidden double slash
+        // Forbidden double slash
         if cross_path.contains("//") {
             return Err(LibraryError::InvalidCharacter(cross_path));
         }
@@ -241,10 +241,10 @@ impl CrossPathBuf {
 
     /// Converts crossplatform path into Windows path.
     ///
-    /// '~'    will be transformed into home  
+    /// '~'     will be transformed into home  
     /// /mnt/c/ will be transformed into c:\\  
     /// /mnt/d/ will be transformed into d:\\  
-    /// /tmp   will be transformed into %TEMP%  
+    /// /tmp    will be transformed into %TEMP%  
     pub fn to_win_path_buf(&self) -> std::path::PathBuf {
         let mut win_path = self.cross_path.clone();
         // '~'    will be transformed into home
@@ -285,10 +285,10 @@ impl CrossPathBuf {
 
     /// Converts crossplatform path into current OS path.
     ///
-    /// '~'    will be transformed into home  
+    /// '~'     will be transformed into home  
     /// /mnt/c/ will be transformed into c:\\  
     /// /mnt/d/ will be transformed into d:\\  
-    /// /tmp   will be transformed into %TEMP%  
+    /// /tmp    will be transformed into %TEMP%  
     pub fn to_current_os_path_buf(&self) -> std::path::PathBuf {
         if cfg!(windows) {
             self.to_win_path_buf()
