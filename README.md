@@ -54,19 +54,20 @@ My opinions are probably not useful for all developers, but they work for me and
     ```
   
 5. Filenames cannot end in a space or dot.
-6. Not allow reserved filenames even with extensions and foldernames:
+6. Not allow reserved filenames even with extensions and foldernames:  
    CON, PRN, AUX, NUL  
    COM1, COM2, COM3, COM4, COM5, COM6, COM7, COM8, COM9  
    LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, LPT9  
-   These names are not really needed and will not be allowed:
+   These names are not really needed and will not be allowed:  
    .  (special name referring to current directory)  
-   This have to be avoided because of traversal attacks:
+   This have to be avoided because of traversal attacks:  
    .. (special name referring to parent directory)  
 
-7. Instead of the problematic Windows 'c:' or 'd:' drives, the neutral crossplatform format will be '/mnt/c' or '/mnt/d'  
-   On Windows:
-   /mnt/c/ will be transformed into c:\\  
-   /mnt/d/ will be transformed into d:\\  
+7. Instead of the problematic Windows 'c:' or 'd:' drives,  
+the neutral crossplatform format will be '/mnt/c' or '/mnt/d'  
+   From Windows:  
+   c:\\ will be transformed into /mnt/c/  
+   d:\\ will be transformed into /mnt/d/  
 8. This special symbols and root folders are allowed and will be transformed for Windows:  
    '~'    will be transformed into %UserProfile%  
    /tmp   will be transformed into %TEMP%  
