@@ -10,13 +10,13 @@ The TODO section is part of the [README.md](https://github.com/bestia-dev/crossp
 
 ## Unreleased
 
+## Version 1.0.6 (2025-09-23)
+
 - backslash is always a problem
 - struct impl
 - join_relative
 - docs
 - publish true
-
-- docs
 
 ## Version 0.0.1
 
