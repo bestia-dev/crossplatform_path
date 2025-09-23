@@ -21,12 +21,12 @@ using HTML Tidy to generate a tidied up version.
 ./docs/crossplatform_path/struct.CrossPathBuf.html
 Document: "2" is not a file!
 
-line 1 column 5533 - Error: <rustdoc-search> is not recognized! Did you mean to enable the custom-tags option?
-line 1 column 5533 - Warning: discarding unexpected <rustdoc-search>
-line 1 column 5549 - Warning: discarding unexpected </rustdoc-search>
-line 1 column 5855 - Error: <rustdoc-toolbar> is not recognized! Did you mean to enable the custom-tags option?
-line 1 column 5855 - Warning: discarding unexpected <rustdoc-toolbar>
-line 1 column 5872 - Warning: discarding unexpected </rustdoc-toolbar>
+line 1 column 5525 - Error: <rustdoc-search> is not recognized! Did you mean to enable the custom-tags option?
+line 1 column 5525 - Warning: discarding unexpected <rustdoc-search>
+line 1 column 5541 - Warning: discarding unexpected </rustdoc-search>
+line 1 column 5847 - Error: <rustdoc-toolbar> is not recognized! Did you mean to enable the custom-tags option?
+line 1 column 5847 - Warning: discarding unexpected <rustdoc-toolbar>
+line 1 column 5864 - Warning: discarding unexpected </rustdoc-toolbar>
 line 13 column 605 - Warning: missing </summary> before <section>
 line 13 column 954 - Warning: discarding unexpected </summary>
 line 13 column 1031 - Warning: missing </summary> before <section>
@@ -140,7 +140,7 @@ line 63 column 239 - Warning: missing </summary> before <section>
 line 63 column 984 - Warning: discarding unexpected </summary>
 line 63 column 1128 - Warning: missing </summary> before <section>
 line 63 column 1991 - Warning: discarding unexpected </summary>
-line 1 column 1887 - Warning: trimming empty <button>
+line 1 column 1879 - Warning: trimming empty <button>
 line 13 column 605 - Warning: trimming empty <summary>
 line 13 column 1031 - Warning: trimming empty <summary>
 line 26 column 60 - Warning: trimming empty <summary>
@@ -194,12 +194,12 @@ using HTML Tidy to generate a tidied up version.
 ./docs/crossplatform_path/enum.LibraryError.html
 Document: "2" is not a file!
 
-line 1 column 4828 - Error: <rustdoc-search> is not recognized! Did you mean to enable the custom-tags option?
-line 1 column 4828 - Warning: discarding unexpected <rustdoc-search>
-line 1 column 4844 - Warning: discarding unexpected </rustdoc-search>
-line 1 column 5146 - Error: <rustdoc-toolbar> is not recognized! Did you mean to enable the custom-tags option?
-line 1 column 5146 - Warning: discarding unexpected <rustdoc-toolbar>
-line 1 column 5163 - Warning: discarding unexpected </rustdoc-toolbar>
+line 1 column 4829 - Error: <rustdoc-search> is not recognized! Did you mean to enable the custom-tags option?
+line 1 column 4829 - Warning: discarding unexpected <rustdoc-search>
+line 1 column 4845 - Warning: discarding unexpected </rustdoc-search>
+line 1 column 5147 - Error: <rustdoc-toolbar> is not recognized! Did you mean to enable the custom-tags option?
+line 1 column 5147 - Warning: discarding unexpected <rustdoc-toolbar>
+line 1 column 5164 - Warning: discarding unexpected </rustdoc-toolbar>
 line 8 column 1705 - Warning: missing </summary> before <section>
 line 8 column 2192 - Warning: discarding unexpected </summary>
 line 8 column 2269 - Warning: missing </summary> before <section>
@@ -283,7 +283,7 @@ line 20 column 239 - Warning: missing </summary> before <section>
 line 20 column 984 - Warning: discarding unexpected </summary>
 line 20 column 1128 - Warning: missing </summary> before <section>
 line 20 column 1991 - Warning: discarding unexpected </summary>
-line 1 column 1861 - Warning: trimming empty <button>
+line 1 column 1862 - Warning: trimming empty <button>
 line 8 column 1705 - Warning: trimming empty <summary>
 line 8 column 2269 - Warning: trimming empty <summary>
 line 8 column 3157 - Warning: trimming empty <summary>
