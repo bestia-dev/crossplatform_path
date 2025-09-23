@@ -1,23 +1,27 @@
-// examples/example_1.rs
+// cargo run --example example_1
 
-//! A simple example how to use the `lib.rs`
-//! You can run it with `cargo run --example example_1`
+use anyhow::Error;
 
-#[allow(unused_imports)]
-use crossplatform_path::*;
+fn main() -> Result<(), Error> {
+    let cross_path = crossplatform_path::CrossPathBuf::new(r#"c:\test\path"#)?;
+    let cross_path = cross_path.join_relative("foo/bar")?;
+    println!("{cross_path}");
 
-// ANSI colors for Linux terminal
-// https://github.com/shiena/ansicolor/blob/master/README.md
-#[allow(dead_code)]
-pub const RED: &str = "\x1b[31m";
-#[allow(dead_code)]
-pub const YELLOW: &str = "\x1b[33m";
-#[allow(dead_code)]
-pub const GREEN: &str = "\x1b[32m";
-#[allow(dead_code)]
-pub const RESET: &str = "\x1b[0m";
+    let linux_path_buf = cross_path.to_path_buf_nix();
+    println!("linux: {:?}", linux_path_buf);
 
-/// example how to use format_hello_phrase() and format_upper_hello_phrase()
-fn main() {
-    println!("example");
+    let win_path_buf = cross_path.to_path_buf_win();
+    println!("windows: {:?}", win_path_buf);
+
+    println!("exists: {}", cross_path.exists());
+    println!("is_dir: {}", cross_path.is_dir());
+    println!("is_file: {}", cross_path.is_file());
+
+    if let Ok(_file) = std::fs::read_to_string(cross_path.to_path_buf_current_os()) {
+        println!("File is found.");
+    } else {
+        println!("File is not found, but that is ok for this example.");
+    }
+
+    Ok(())
 }

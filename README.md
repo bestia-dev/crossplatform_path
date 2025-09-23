@@ -6,7 +6,7 @@
 [//]: # (auto_cargo_toml_to_md start)
 
 **Crossplatform Path Rust library**  
-***version: 1.0.6 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+***version: 1.0.12 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 
  ![maintained](https://img.shields.io/badge/maintained-green)
  ![work-in-progress](https://img.shields.io/badge/work_in_progress-yellow)
@@ -21,11 +21,11 @@
   ![crossplatform_path](https://bestia.dev/webpage_hit_counter/get_svg_image/1320456497.svg)
 
 [//]: # (auto_lines_of_code start)
-[![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-58-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
-[![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-149-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
-[![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-28-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
-[![Lines in examples](https://img.shields.io/badge/Lines_in_examples-23-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
-[![Lines in tests](https://img.shields.io/badge/Lines_in_tests-182-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-63-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-178-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-32-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in examples](https://img.shields.io/badge/Lines_in_examples-27-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in tests](https://img.shields.io/badge/Lines_in_tests-200-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
 
 [//]: # (auto_lines_of_code end)
 
@@ -66,7 +66,7 @@ My opinions are probably not useful for all developers, but they work for me and
    .. (special name referring to parent directory)  
 
 7. Instead of the problematic Windows 'c:' or 'd:' drives,  
-the neutral crossplatform format will be '/mnt/c' or '/mnt/d'  
+   the neutral crossplatform format will be '/mnt/c' or '/mnt/d'  
    From Windows:  
    c:\\ will be transformed into /mnt/c/  
    d:\\ will be transformed into /mnt/d/  
@@ -74,6 +74,33 @@ the neutral crossplatform format will be '/mnt/c' or '/mnt/d'
    '~'    will be transformed into %UserProfile%  
    /tmp   will be transformed into %TEMP%  
 9. Definitely some paths in one OS have absolutely no meaning in other OS, but these have to be avoided manually.
+
+## Usage
+
+```rust
+// cargo add crossplatform_path
+
+let cross_path = crossplatform_path::CrossPathBuf::new(r#"c:\test\path"#).unwrap();
+let cross_path = cross_path.join_relative("foo/bar").unwrap();
+println!("{cross_path}");
+
+let linux_path_buf = cross_path.to_path_buf_nix();
+println!("linux: {:?}", linux_path_buf);
+
+let win_path_buf = cross_path.to_path_buf_win();
+println!("windows: {:?}", win_path_buf);
+
+println!("exists: {}", cross_path.exists());
+println!("is_dir: {}", cross_path.is_dir());
+println!("is_file: {}", cross_path.is_file());
+
+if let Ok(_file)=std::fs::read_to_string(cross_path.to_path_buf_current_os()){
+   println!("File is found.");
+} else {
+   println!("File is not found, but that is ok for this example.");
+}
+
+```
 
 ## Development details
 
