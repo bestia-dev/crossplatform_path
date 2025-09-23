@@ -6,7 +6,7 @@
 [//]: # (auto_cargo_toml_to_md start)
 
 **Crossplatform Path Rust library**  
-***version: 1.0.21 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+***version: 1.0.22 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 
  ![maintained](https://img.shields.io/badge/maintained-green)
  ![work-in-progress](https://img.shields.io/badge/work_in_progress-yellow)
@@ -98,8 +98,8 @@ println!("exists: {}", cross_path.exists());
 println!("is_dir: {}", cross_path.is_dir());
 println!("is_file: {}", cross_path.is_file());
 
-println!("Second create a new directory and file");
-let cross_path = crossplatform_path::CrossPathBuf::new(r#"tmp/folder_1/file_1.txt"#)?;
+println!("Second create a new directory (all components) and file");
+let cross_path = crossplatform_path::CrossPathBuf::new(r#"tmp/folder_1"#)?.join_relative(r#"file_1.txt"#)?;
 cross_path.write_str_to_file("content for testing")?;
 
 let content = cross_path.read_to_string()?;

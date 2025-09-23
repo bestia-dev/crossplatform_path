@@ -12,8 +12,6 @@ The TODO section is part of the [README.md](https://github.com/bestia-dev/crossp
 
 ## Version 1.0.21 (2025-09-23)
 
-## Version 1.0.21 (2025-09-23)
-
 - examples
 - doctest
 - read and write
