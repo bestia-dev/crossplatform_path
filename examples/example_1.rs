@@ -4,7 +4,7 @@ use anyhow::Error;
 
 fn main() -> Result<(), Error> {
     let cross_path = crossplatform_path::CrossPathBuf::new(r#"c:\test\path"#)?;
-    let cross_path = cross_path.join_relative("foo/bar")?;
+    let cross_path = cross_path.join_relative("foo/bar")?.join_relative("one/two")?;
     println!("{cross_path}");
 
     let linux_path_buf = cross_path.to_path_buf_nix();

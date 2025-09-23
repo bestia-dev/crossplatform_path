@@ -14,6 +14,8 @@ The TODO section is part of the [README.md](https://github.com/bestia-dev/crossp
 
 - examples
 
+- doctest
+
 ## Version 1.0.6 (2025-09-23)
 
 - backslash is always a problem

@@ -4,7 +4,7 @@
 //! # crossplatform_path
 //!
 //! **Crossplatform Path Rust library**  
-//! ***version: 1.0.12 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+//! ***version: 1.0.14 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 //!
 //!  ![maintained](https://img.shields.io/badge/maintained-green)
 //!  ![work-in-progress](https://img.shields.io/badge/work_in_progress-yellow)
@@ -73,8 +73,8 @@
 //! ```rust
 //! // cargo add crossplatform_path
 //!
-//! let cross_path = crossplatform_path::CrossPathBuf::new(r#"c:\test\path"#).unwrap();
-//! let cross_path = cross_path.join_relative("foo/bar").unwrap();
+//! let cross_path = crossplatform_path::CrossPathBuf::new(r#"c:\test\path"#)?;
+//! let cross_path = cross_path.join_relative("foo/bar")?.join_relative("one/two")?;
 //! println!("{cross_path}");
 //!
 //! let linux_path_buf = cross_path.to_path_buf_nix();
@@ -92,7 +92,7 @@
 //! } else {
 //!    println!("File is not found, but that is ok for this example.");
 //! }
-//!
+//! # Ok::<(), crossplatform_path::LibraryError>(())
 //! ```
 //!
 //! ## Development details
