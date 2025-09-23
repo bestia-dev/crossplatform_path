@@ -6,7 +6,7 @@
 [//]: # (auto_cargo_toml_to_md start)
 
 **Crossplatform Path Rust library**  
-***version: 1.0.15 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+***version: 1.0.21 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 
  ![maintained](https://img.shields.io/badge/maintained-green)
  ![work-in-progress](https://img.shields.io/badge/work_in_progress-yellow)
@@ -22,10 +22,10 @@
 
 [//]: # (auto_lines_of_code start)
 [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-63-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
-[![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-178-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-199-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
 [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-32-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
-[![Lines in examples](https://img.shields.io/badge/Lines_in_examples-27-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
-[![Lines in tests](https://img.shields.io/badge/Lines_in_tests-200-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in examples](https://img.shields.io/badge/Lines_in_examples-32-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in tests](https://img.shields.io/badge/Lines_in_tests-241-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
 
 [//]: # (auto_lines_of_code end)
 
@@ -80,6 +80,7 @@ My opinions are probably not useful for all developers, but they work for me and
 ```rust
 // cargo add crossplatform_path
 
+println!("First a non existing path");
 let cross_path = crossplatform_path::CrossPathBuf::new(r#"c:\test\path"#)?;
 let cross_path = cross_path.join_relative("foo/bar")?.join_relative("one/two")?;
 println!("{cross_path}");
@@ -90,15 +91,20 @@ println!("linux: {:?}", linux_path_buf);
 let win_path_buf = cross_path.to_path_buf_win();
 println!("windows: {:?}", win_path_buf);
 
+let current_os_path_buf = cross_path.to_path_buf_current_os();
+println!("current_os: {:?}", current_os_path_buf);
+
 println!("exists: {}", cross_path.exists());
 println!("is_dir: {}", cross_path.is_dir());
 println!("is_file: {}", cross_path.is_file());
 
-if let Ok(_file)=std::fs::read_to_string(cross_path.to_path_buf_current_os()){
-   println!("File is found.");
-} else {
-   println!("File is not found, but that is ok for this example.");
-}
+println!("Second create a new directory and file");
+let cross_path = crossplatform_path::CrossPathBuf::new(r#"tmp/folder_1/file_1.txt"#)?;
+cross_path.write_str_to_file("content for testing")?;
+
+let content = cross_path.read_to_string()?;
+println!("content: {content}");
+   
 # Ok::<(), crossplatform_path::LibraryError>(())
 ```
 

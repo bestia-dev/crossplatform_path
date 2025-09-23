@@ -4,7 +4,7 @@
 //! # crossplatform_path
 //!
 //! **Crossplatform Path Rust library**  
-//! ***version: 1.0.14 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+//! ***version: 1.0.21 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 //!
 //!  ![maintained](https://img.shields.io/badge/maintained-green)
 //!  ![work-in-progress](https://img.shields.io/badge/work_in_progress-yellow)
@@ -17,10 +17,10 @@
 //!   ![crossplatform_path](https://bestia.dev/webpage_hit_counter/get_svg_image/1320456497.svg)
 //!
 //! [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-63-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-178-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-199-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //! [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-32-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-27-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-200-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-32-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-241-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //!
 //! Hashtags: #maintained #work-in-progress #rustlang  
 //! My projects on GitHub are more like a tutorial than a finished product: [bestia-dev tutorials](https://github.com/bestia-dev/tutorials_rust_wasm).  
@@ -73,6 +73,7 @@
 //! ```rust
 //! // cargo add crossplatform_path
 //!
+//! println!("First a non existing path");
 //! let cross_path = crossplatform_path::CrossPathBuf::new(r#"c:\test\path"#)?;
 //! let cross_path = cross_path.join_relative("foo/bar")?.join_relative("one/two")?;
 //! println!("{cross_path}");
@@ -83,15 +84,20 @@
 //! let win_path_buf = cross_path.to_path_buf_win();
 //! println!("windows: {:?}", win_path_buf);
 //!
+//! let current_os_path_buf = cross_path.to_path_buf_current_os();
+//! println!("current_os: {:?}", current_os_path_buf);
+//!
 //! println!("exists: {}", cross_path.exists());
 //! println!("is_dir: {}", cross_path.is_dir());
 //! println!("is_file: {}", cross_path.is_file());
 //!
-//! if let Ok(_file)=std::fs::read_to_string(cross_path.to_path_buf_current_os()){
-//!    println!("File is found.");
-//! } else {
-//!    println!("File is not found, but that is ok for this example.");
-//! }
+//! println!("Second create a new directory and file");
+//! let cross_path = crossplatform_path::CrossPathBuf::new(r#"tmp/folder_1/file_1.txt"#)?;
+//! cross_path.write_str_to_file("content for testing")?;
+//!
+//! let content = cross_path.read_to_string()?;
+//! println!("content: {content}");
+//!    
 //! # Ok::<(), crossplatform_path::LibraryError>(())
 //! ```
 //!
@@ -143,6 +149,8 @@ pub enum LibraryError {
     MustNotEndWith(String),
     #[error(r#"The path string {0} must not contain reserved words con, prn, aux, nul, com1-com9, lpt1-lpt9, . and .."#)]
     ReservedWords(String),
+    #[error(r#"The parent of {0} does not exist."#)]
+    NoParent(String),
     #[error("I/O error: {path} {source}")]
     IoError {
         #[source]
@@ -378,8 +386,62 @@ impl CrossPathBuf {
         Ok(CrossPathBuf { cross_path })
     }
 
-    pub fn read_to_string(&self) -> Result<String, std::io::Error> {
-        std::fs::read_to_string(self.to_path_buf_current_os())
+    /// Reads the entire contents of a file into a string.  \
+    ///
+    /// This is a convenience function based on std::fs::read_to_string  
+    pub fn read_to_string(&self) -> Result<String, LibraryError> {
+        match std::fs::read_to_string(self.to_path_buf_current_os()) {
+            Ok(content) => Ok(content),
+            Err(err) => Err(LibraryError::IoError {
+                source: err,
+                path: self.cross_path.to_string(),
+            }),
+        }
+    }
+
+    /// Writes a slice as the entire contents of a file.  \
+    ///
+    /// This function will create a file if it does not exist, and will entirely replace its contents if it does.  \
+    /// It creates the full path directory, if path does not exist.  
+    pub fn write_str_to_file(&self, content: &str) -> Result<(), LibraryError> {
+        self.create_dir_all_for_file()?;
+        match std::fs::write(self.to_path_buf_current_os(), content) {
+            Ok(_) => Ok(()),
+            Err(err) => Err(LibraryError::IoError {
+                source: err,
+                path: self.cross_path.clone(),
+            }),
+        }
+    }
+
+    /// Recursively create this path as directory and all of its parent components if they are missing.  \
+    ///
+    /// The cross_path must represent a directory and not a file for this command.
+    /// This function is not atomic. If it returns an error, any parent components it was able to create will remain.   
+    pub fn create_dir_all(&self) -> Result<(), LibraryError> {
+        match std::fs::create_dir_all(self.to_path_buf_current_os()) {
+            Ok(_) => Ok(()),
+            Err(err) => Err(LibraryError::IoError {
+                source: err,
+                path: self.cross_path.clone(),
+            }),
+        }
+    }
+
+    /// Recursively create the parent directory of a file and all of its parent components if they are missing.  \
+    ///
+    /// The cross_path must represent a file. The parent directory will be created.
+    /// This function is not atomic. If it returns an error, any parent components it was able to create will remain.   
+    pub fn create_dir_all_for_file(&self) -> Result<(), LibraryError> {
+        let path = self.to_path_buf_current_os();
+        let parent = path.parent().ok_or_else(|| LibraryError::NoParent(self.cross_path.clone()))?;
+        match std::fs::create_dir_all(parent) {
+            Ok(_) => Ok(()),
+            Err(err) => Err(LibraryError::IoError {
+                source: err,
+                path: self.cross_path.to_string(),
+            }),
+        }
     }
 }
 
