@@ -3,9 +3,7 @@
 use anyhow::Result;
 
 fn main() -> Result<()> {
-    println!("First a non existing path");
-    let cross_path = crossplatform_path::CrossPathBuf::new(r#"c:\test\path"#)?;
-    let cross_path = cross_path.join_relative("foo/bar")?.join_relative("one/two")?;
+    let cross_path = crossplatform_path::CrossPathBuf::new(r#"tmp\folder_1"#)?.join_relative(r#"file_1.txt"#)?;
     println!("{cross_path}");
 
     let linux_path_buf = cross_path.to_path_buf_nix();
@@ -21,12 +19,22 @@ fn main() -> Result<()> {
     println!("is_dir: {}", cross_path.is_dir());
     println!("is_file: {}", cross_path.is_file());
 
-    println!("Second create a new directory (all components) and file");
-    let cross_path = crossplatform_path::CrossPathBuf::new(r#"tmp/folder_1"#)?.join_relative(r#"file_1.txt"#)?;
+    println!("parent: {}", cross_path.parent()?);
+    println!("file_name: {}", cross_path.file_name()?);
+    println!("file_stem: {}", cross_path.file_stem()?);
+    println!("extension: {}", cross_path.extension()?);
+
+    println!("write_str_to_file");
     cross_path.write_str_to_file("content for testing")?;
 
     let content = cross_path.read_to_string()?;
-    println!("content: {content}");
+    println!("read_to_string: {content}");
+
+    let cross_path = cross_path.add_start_slash()?.add_end_slash()?;
+    println!("add slashes {}", cross_path);
+
+    let cross_path = cross_path.trim_start_slash()?.trim_end_slash()?;
+    println!("trim slashes {}", cross_path);
 
     Ok(())
 }

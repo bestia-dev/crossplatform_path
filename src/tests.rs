@@ -60,3 +60,20 @@ fn test_06_join_relative() {
     assert_eq!(cross_path.to_path_buf_nix().to_string_lossy(), "test/path/foo/bar/foo2/bar2");
     assert_eq!(cross_path.to_path_buf_win().to_string_lossy(), "test/path/foo/bar/foo2/bar2");
 }
+
+#[test]
+fn test_07_trim_add() {
+    let cross_path = CrossPathBuf::new(r#"test/path"#).unwrap();
+    let cross_path = cross_path.add_start_slash().unwrap().add_end_slash().unwrap();
+    assert_eq!(cross_path.as_str(), "/test/path/");
+    let cross_path = cross_path.trim_start_slash().unwrap().trim_end_slash().unwrap();
+    assert_eq!(cross_path.as_str(), "test/path");
+}
+
+#[test]
+fn test_07_file_name() {
+    let cross_path = CrossPathBuf::new(r#"foo/bar.txt"#).unwrap();
+    assert_eq!(cross_path.file_name().unwrap(), "bar.txt");
+    assert_eq!(cross_path.file_stem().unwrap(), "bar");
+    assert_eq!(cross_path.extension().unwrap(), "txt");
+}

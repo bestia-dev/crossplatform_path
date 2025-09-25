@@ -4,7 +4,7 @@
 //! # crossplatform_path
 //!
 //! **Crossplatform Path Rust library**  
-//! ***version: 1.0.22 date: 2025-09-23 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+//! ***version: 1.1.1 date: 2025-09-25 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 //!
 //!  ![maintained](https://img.shields.io/badge/maintained-green)
 //!  ![work-in-progress](https://img.shields.io/badge/work_in_progress-yellow)
@@ -16,11 +16,11 @@
 //!   [![Rust](https://github.com/bestia-dev/crossplatform_path/workflows/rust_fmt_auto_build_test/badge.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //!   ![crossplatform_path](https://bestia.dev/webpage_hit_counter/get_svg_image/1320456497.svg)
 //!
-//! [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-63-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-199-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-32-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-32-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-241-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-80-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-219-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-33-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-40-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-303-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //!
 //! Hashtags: #maintained #work-in-progress #rustlang  
 //! My projects on GitHub are more like a tutorial than a finished product: [bestia-dev tutorials](https://github.com/bestia-dev/tutorials_rust_wasm).  
@@ -73,9 +73,7 @@
 //! ```rust
 //! // cargo add crossplatform_path
 //!
-//! println!("First a non existing path");
-//! let cross_path = crossplatform_path::CrossPathBuf::new(r#"c:\test\path"#)?;
-//! let cross_path = cross_path.join_relative("foo/bar")?.join_relative("one/two")?;
+//! let cross_path = crossplatform_path::CrossPathBuf::new(r#"tmp\folder_1"#)?.join_relative(r#"file_1.txt"#)?;
 //! println!("{cross_path}");
 //!
 //! let linux_path_buf = cross_path.to_path_buf_nix();
@@ -91,12 +89,23 @@
 //! println!("is_dir: {}", cross_path.is_dir());
 //! println!("is_file: {}", cross_path.is_file());
 //!
-//! println!("Second create a new directory (all components) and file");
-//! let cross_path = crossplatform_path::CrossPathBuf::new(r#"tmp/folder_1"#)?.join_relative(r#"file_1.txt"#)?;
+//! println!("parent: {}", cross_path.parent()?);
+//! println!("file_name: {}", cross_path.file_name()?);
+//! println!("file_stem: {}", cross_path.file_stem()?);
+//! println!("extension: {}", cross_path.extension()?);
+//!
+//! println!("write_str_to_file");
 //! cross_path.write_str_to_file("content for testing")?;
 //!
 //! let content = cross_path.read_to_string()?;
-//! println!("content: {content}");
+//! println!("read_to_string: {content}");
+//!
+//!
+//! let cross_path = cross_path.add_start_slash()?.add_end_slash()?;
+//! println!("add slashes {}", cross_path);
+//!
+//! let cross_path = cross_path.trim_start_slash()?.trim_end_slash()?;
+//! println!("trim slashes {}", cross_path);
 //!    
 //! # Ok::<(), crossplatform_path::LibraryError>(())
 //! ```
@@ -151,6 +160,8 @@ pub enum LibraryError {
     ReservedWords(String),
     #[error(r#"The parent of {0} does not exist."#)]
     NoParent(String),
+    #[error(r#"The file_name of {0} does not exist."#)]
+    NoFileName(String),
     #[error("I/O error: {path} {source}")]
     IoError {
         #[source]
@@ -219,7 +230,8 @@ impl CrossPathBuf {
         }
 
         // Separator is always slash. Backslash is replaced. Backslash must never be a part of a name or path component.
-        let mut cross_path = str_path.replace(r#"\"#, "/");
+        // trim: leading and trailing whitespace removed
+        let mut cross_path = str_path.trim().replace(r#"\"#, "/");
 
         // 6. Not allow reserved filenames even with extensions and foldernames:
         // Windows path is case insensitive, so I must check insensitive. I will use to_lowercase.
@@ -442,6 +454,77 @@ impl CrossPathBuf {
                 path: self.cross_path.to_string(),
             }),
         }
+    }
+
+    /// Returns a CrossPathBuf without leading start slash (repeatedly removed).  
+    pub fn trim_start_slash(&self) -> Result<Self, LibraryError> {
+        let cross_path = self.cross_path.trim_start_matches('/').trim().to_string();
+        Ok(CrossPathBuf { cross_path })
+    }
+
+    /// Returns a CrossPathBuf without trailing end slash (repeatedly removed).  
+    pub fn trim_end_slash(&self) -> Result<Self, LibraryError> {
+        let cross_path = self.cross_path.trim_end_matches('/').trim().to_string();
+        Ok(CrossPathBuf { cross_path })
+    }
+
+    /// Returns a CrossPathBuf with one leading start slash.  
+    pub fn add_start_slash(&self) -> Result<Self, LibraryError> {
+        let cross_path = format!("/{}", self.cross_path.trim_start_matches('/').trim());
+        Ok(CrossPathBuf { cross_path })
+    }
+
+    /// Returns a CrossPathBuf with one trailing end slash.  
+    pub fn add_end_slash(&self) -> Result<Self, LibraryError> {
+        let cross_path = format!("{}/", self.cross_path.trim_end_matches('/').trim());
+        Ok(CrossPathBuf { cross_path })
+    }
+
+    /// Returns the final component of the Path, if there is one.
+    ///
+    /// If the path is a normal file, this is the file name.
+    /// If it's the path of a directory, this is the directory name.
+    pub fn file_name(&self) -> Result<String, LibraryError> {
+        let file_name = self
+            .to_path_buf_current_os()
+            .file_name()
+            .ok_or_else(|| LibraryError::NoFileName(self.cross_path.clone()))?
+            .to_string_lossy()
+            .to_string();
+        Ok(file_name)
+    }
+
+    /// Extracts the extension (without the leading dot), if possible.  
+    pub fn extension(&self) -> Result<String, LibraryError> {
+        let file_name = self
+            .to_path_buf_current_os()
+            .extension()
+            .ok_or_else(|| LibraryError::NoFileName(self.cross_path.clone()))?
+            .to_string_lossy()
+            .to_string();
+        Ok(file_name)
+    }
+
+    /// Extracts the stem (non-extension) portion of file_name (the final component of the Path).
+    pub fn file_stem(&self) -> Result<String, LibraryError> {
+        let file_name = self
+            .to_path_buf_current_os()
+            .file_stem()
+            .ok_or_else(|| LibraryError::NoFileName(self.cross_path.clone()))?
+            .to_string_lossy()
+            .to_string();
+        Ok(file_name)
+    }
+
+    /// Returns the Path without its final component, if there is one.
+    pub fn parent(&self) -> Result<Self, LibraryError> {
+        CrossPathBuf::new(
+            &self
+                .to_path_buf_current_os()
+                .parent()
+                .ok_or_else(|| LibraryError::NoParent(self.cross_path.clone()))?
+                .to_string_lossy(),
+        )
     }
 }
 
