@@ -226,7 +226,7 @@ fn task_commit_and_push(arg_2: Option<String>) {
 
 /// publish to crates.io and git tag
 fn task_publish_to_crates_io() {
-    let _tag_name_version = crate::build_cli_bin_mod::task_publish_to_crates_io();
+    let _tag_name_version = crate::build_lib_mod::task_publish_to_crates_io();
 
     println!(
         r#"

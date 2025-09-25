@@ -15,6 +15,8 @@ use cargo_auto_lib::ShellCommandLimitedDoubleQuotesSanitizerTrait;
 #[allow(unused_imports)]
 pub use cl::{BLUE, GREEN, RED, RESET, YELLOW};
 
+use crossplatform_path::CrossPathBuf;
+
 #[allow(dead_code)]
 /// cargo doc, then copies to /docs/ folder, because this is a GitHub standard folder
 pub fn task_doc() {
@@ -80,7 +82,7 @@ pub fn task_commit_and_push(arg_2: Option<String>) {
         cgl::description_and_topics_to_github();
 
         // separate commit for docs if they changed, to not make a lot of noise in the real commit
-        if std::path::Path::new("docs").exists() {
+        if CrossPathBuf::new("docs").unwrap().exists() {
             cl::run_shell_command_static(r#"git add docs && git diff --staged --quiet || git commit -m "update docs" "#)
                 .unwrap_or_else(|e| panic!("{e}"));
         }
