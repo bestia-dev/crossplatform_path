@@ -10,6 +10,8 @@ The TODO section is part of the [README.md](https://github.com/bestia-dev/crossp
 
 ## Unreleased
 
+- ready-for-use
+
 ## Version 1.1.1 (2025-09-25)
 
 - trim add parent
