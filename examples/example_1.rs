@@ -1,8 +1,6 @@
 // cargo run --example example_1
 
-use anyhow::Result;
-
-fn main() -> Result<()> {
+fn main() -> anyhow::Result<()> {
     let cross_path = crossplatform_path::CrossPathBuf::new(r#"tmp\folder_1"#)?.join_relative(r#"file_1.txt"#)?;
     println!("{cross_path}");
 

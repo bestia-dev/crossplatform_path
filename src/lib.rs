@@ -4,7 +4,7 @@
 //! # crossplatform_path
 //!
 //! **Crossplatform Path Rust library**  
-//! ***version: 1.1.2 date: 2025-09-25 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+//! ***version: 1.2.1 date: 2025-09-28 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 //!
 //!  ![maintained](https://img.shields.io/badge/maintained-green)
 //!  ![ready-for-use](https://img.shields.io/badge/ready_for_use-green)
@@ -17,9 +17,9 @@
 //!   ![crossplatform_path](https://bestia.dev/webpage_hit_counter/get_svg_image/1320456497.svg)
 //!
 //! [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-80-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-219-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-33-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-40-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-224-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-32-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-38-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-303-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //!
 //! Hashtags: #maintained #work-in-progress #rustlang  
@@ -107,7 +107,7 @@
 //! let cross_path = cross_path.trim_start_slash()?.trim_end_slash()?;
 //! println!("trim slashes {}", cross_path);
 //!    
-//! # Ok::<(), crossplatform_path::LibraryError>(())
+//! # Ok::<(), crossplatform_path::Error>(())
 //! ```
 //!
 //! ## Development details
@@ -122,7 +122,6 @@
 //!
 //! ## TODO
 //!
-//! Change panics into proper library errors.
 //! And code happily ever after...
 //!
 //! ## Open-source and free as a beer
@@ -144,12 +143,9 @@
 #[cfg(test)]
 mod tests;
 
-// The `lib.rs` uses the `thiserror` library.
-use thiserror::Error;
-
 /// All possible library errors for `thiserror`.
-#[derive(Error, Debug)]
-pub enum LibraryError {
+#[derive(thiserror::Error, Debug)]
+pub enum Error {
     #[error(r#"The string {0} contains an invalid windows path character < > : " | ? * "#)]
     InvalidCharacter(String),
     #[error(r#"The string {0} contains forbidden ascii control character for windows path 0-31 "#)]
@@ -171,6 +167,13 @@ pub enum LibraryError {
     #[error("Unknown error.")]
     Unknown,
 }
+
+/// crossplatform_path::Result
+///
+/// `crossplatform_path::Result` is used with just one parameter.
+/// Instead of the regular Result with second parameter,
+/// that is always crossplatform_path::Error in this library.
+pub type Result<T, E = Error> = core::result::Result<T, E>;
 
 /// CrossPathBuf stores Path in a Neutral Crossplatform format.  \
 ///
@@ -204,7 +207,7 @@ impl CrossPathBuf {
     /// Separator is always slash. Backslash is replaced. Backslash must never be a part of a name or path component.  \
     /// Must not contain reserved words con, prn, aux, nul, com1-com9, lpt1-lpt9, . and ..  \
     /// If start with windows c: or d: convert to /mnt/c or /mnt/d lowercase  
-    pub fn new(str_path: &str) -> Result<Self, LibraryError> {
+    pub fn new(str_path: &str) -> Result<Self> {
         // forbidden: < > : " / \\ | ? *  0 (NULL byte)  0-31 (ASCII control characters)
         // but : / and \\ are delimiters and can be used in a path fragment with multiple components.
         if str_path.contains("<")
@@ -214,19 +217,19 @@ impl CrossPathBuf {
             || str_path.contains("?")
             || str_path.contains("*")
         {
-            return Err(LibraryError::InvalidCharacter(str_path.to_string()));
+            return Err(Error::InvalidCharacter(str_path.to_string()));
         }
         // 0 (NULL byte) and  0-31 (ASCII control characters) 127 is DEL
         // Important: utf8 is always on a byte level compatible with ASCII7, under 127.
         for byte in str_path.bytes() {
             match byte {
-                0x00..=0x1F | 0x7F => return Err(LibraryError::ForbiddenAscii(str_path.to_string())),
+                0x00..=0x1F | 0x7F => return Err(Error::ForbiddenAscii(str_path.to_string())),
                 _ => (),
             }
         }
         //Filenames cannot end in a space or dot.
         if str_path.ends_with(" ") || str_path.ends_with(".") {
-            return Err(LibraryError::MustNotEndWith(str_path.to_string()));
+            return Err(Error::MustNotEndWith(str_path.to_string()));
         }
 
         // Separator is always slash. Backslash is replaced. Backslash must never be a part of a name or path component.
@@ -269,7 +272,7 @@ impl CrossPathBuf {
             || delimited_str_path.contains("/./")
             || delimited_str_path.contains("/../")
         {
-            return Err(LibraryError::ReservedWords(str_path.to_string()));
+            return Err(Error::ReservedWords(str_path.to_string()));
         }
 
         // If start with windows c: or d: convert to /mnt/c or /mnt/d lowercase
@@ -283,12 +286,12 @@ impl CrossPathBuf {
 
         // Forbidden character, except for windows drive
         if cross_path.contains(":") {
-            return Err(LibraryError::InvalidCharacter(cross_path));
+            return Err(Error::InvalidCharacter(cross_path));
         }
 
         // Forbidden double slash
         if cross_path.contains("//") {
-            return Err(LibraryError::InvalidCharacter(cross_path));
+            return Err(Error::InvalidCharacter(cross_path));
         }
 
         Ok(CrossPathBuf { cross_path })
@@ -388,7 +391,7 @@ impl CrossPathBuf {
     ///
     /// It works differently from the original Rust join() where if the second path is absolute, it overwrites the first path.  \
     /// Here the second path is always relative and is added to the first path.
-    pub fn join_relative(&self, str_path: &str) -> Result<Self, LibraryError> {
+    pub fn join_relative(&self, str_path: &str) -> Result<Self> {
         let second_path = CrossPathBuf::new(str_path)?;
         let cross_path = format!(
             "{}/{}",
@@ -401,10 +404,10 @@ impl CrossPathBuf {
     /// Reads the entire contents of a file into a string.  \
     ///
     /// This is a convenience function based on std::fs::read_to_string  
-    pub fn read_to_string(&self) -> Result<String, LibraryError> {
+    pub fn read_to_string(&self) -> Result<String> {
         match std::fs::read_to_string(self.to_path_buf_current_os()) {
             Ok(content) => Ok(content),
-            Err(err) => Err(LibraryError::IoError {
+            Err(err) => Err(Error::IoError {
                 source: err,
                 path: self.cross_path.to_string(),
             }),
@@ -415,11 +418,11 @@ impl CrossPathBuf {
     ///
     /// This function will create a file if it does not exist, and will entirely replace its contents if it does.  \
     /// It creates the full path directory, if path does not exist.  
-    pub fn write_str_to_file(&self, content: &str) -> Result<(), LibraryError> {
+    pub fn write_str_to_file(&self, content: &str) -> Result<()> {
         self.create_dir_all_for_file()?;
         match std::fs::write(self.to_path_buf_current_os(), content) {
             Ok(_) => Ok(()),
-            Err(err) => Err(LibraryError::IoError {
+            Err(err) => Err(Error::IoError {
                 source: err,
                 path: self.cross_path.clone(),
             }),
@@ -430,10 +433,10 @@ impl CrossPathBuf {
     ///
     /// The cross_path must represent a directory and not a file for this command.
     /// This function is not atomic. If it returns an error, any parent components it was able to create will remain.   
-    pub fn create_dir_all(&self) -> Result<(), LibraryError> {
+    pub fn create_dir_all(&self) -> Result<()> {
         match std::fs::create_dir_all(self.to_path_buf_current_os()) {
             Ok(_) => Ok(()),
-            Err(err) => Err(LibraryError::IoError {
+            Err(err) => Err(Error::IoError {
                 source: err,
                 path: self.cross_path.clone(),
             }),
@@ -444,12 +447,12 @@ impl CrossPathBuf {
     ///
     /// The cross_path must represent a file. The parent directory will be created.
     /// This function is not atomic. If it returns an error, any parent components it was able to create will remain.   
-    pub fn create_dir_all_for_file(&self) -> Result<(), LibraryError> {
+    pub fn create_dir_all_for_file(&self) -> Result<()> {
         let path = self.to_path_buf_current_os();
-        let parent = path.parent().ok_or_else(|| LibraryError::NoParent(self.cross_path.clone()))?;
+        let parent = path.parent().ok_or_else(|| Error::NoParent(self.cross_path.clone()))?;
         match std::fs::create_dir_all(parent) {
             Ok(_) => Ok(()),
-            Err(err) => Err(LibraryError::IoError {
+            Err(err) => Err(Error::IoError {
                 source: err,
                 path: self.cross_path.to_string(),
             }),
@@ -457,25 +460,25 @@ impl CrossPathBuf {
     }
 
     /// Returns a CrossPathBuf without leading start slash (repeatedly removed).  
-    pub fn trim_start_slash(&self) -> Result<Self, LibraryError> {
+    pub fn trim_start_slash(&self) -> Result<Self> {
         let cross_path = self.cross_path.trim_start_matches('/').trim().to_string();
         Ok(CrossPathBuf { cross_path })
     }
 
     /// Returns a CrossPathBuf without trailing end slash (repeatedly removed).  
-    pub fn trim_end_slash(&self) -> Result<Self, LibraryError> {
+    pub fn trim_end_slash(&self) -> Result<Self> {
         let cross_path = self.cross_path.trim_end_matches('/').trim().to_string();
         Ok(CrossPathBuf { cross_path })
     }
 
     /// Returns a CrossPathBuf with one leading start slash.  
-    pub fn add_start_slash(&self) -> Result<Self, LibraryError> {
+    pub fn add_start_slash(&self) -> Result<Self> {
         let cross_path = format!("/{}", self.cross_path.trim_start_matches('/').trim());
         Ok(CrossPathBuf { cross_path })
     }
 
     /// Returns a CrossPathBuf with one trailing end slash.  
-    pub fn add_end_slash(&self) -> Result<Self, LibraryError> {
+    pub fn add_end_slash(&self) -> Result<Self> {
         let cross_path = format!("{}/", self.cross_path.trim_end_matches('/').trim());
         Ok(CrossPathBuf { cross_path })
     }
@@ -484,45 +487,45 @@ impl CrossPathBuf {
     ///
     /// If the path is a normal file, this is the file name.
     /// If it's the path of a directory, this is the directory name.
-    pub fn file_name(&self) -> Result<String, LibraryError> {
+    pub fn file_name(&self) -> Result<String> {
         let file_name = self
             .to_path_buf_current_os()
             .file_name()
-            .ok_or_else(|| LibraryError::NoFileName(self.cross_path.clone()))?
+            .ok_or_else(|| Error::NoFileName(self.cross_path.clone()))?
             .to_string_lossy()
             .to_string();
         Ok(file_name)
     }
 
     /// Extracts the extension (without the leading dot), if possible.  
-    pub fn extension(&self) -> Result<String, LibraryError> {
+    pub fn extension(&self) -> Result<String> {
         let file_name = self
             .to_path_buf_current_os()
             .extension()
-            .ok_or_else(|| LibraryError::NoFileName(self.cross_path.clone()))?
+            .ok_or_else(|| Error::NoFileName(self.cross_path.clone()))?
             .to_string_lossy()
             .to_string();
         Ok(file_name)
     }
 
     /// Extracts the stem (non-extension) portion of file_name (the final component of the Path).
-    pub fn file_stem(&self) -> Result<String, LibraryError> {
+    pub fn file_stem(&self) -> Result<String> {
         let file_name = self
             .to_path_buf_current_os()
             .file_stem()
-            .ok_or_else(|| LibraryError::NoFileName(self.cross_path.clone()))?
+            .ok_or_else(|| Error::NoFileName(self.cross_path.clone()))?
             .to_string_lossy()
             .to_string();
         Ok(file_name)
     }
 
     /// Returns the Path without its final component, if there is one.
-    pub fn parent(&self) -> Result<Self, LibraryError> {
+    pub fn parent(&self) -> Result<Self> {
         CrossPathBuf::new(
             &self
                 .to_path_buf_current_os()
                 .parent()
-                .ok_or_else(|| LibraryError::NoParent(self.cross_path.clone()))?
+                .ok_or_else(|| Error::NoParent(self.cross_path.clone()))?
                 .to_string_lossy(),
         )
     }
@@ -546,7 +549,7 @@ impl From<CrossPathBuf> for std::path::PathBuf {
 
 // TODO: is it possible to impl AsRef<Path>?
 // many functions accept AsRef<Path>
-// I cannot create a PathBuf inside as_ref() because
+// problem: I cannot create a PathBuf inside as_ref() because
 // then cannot return value referencing temporary value
 /* impl AsRef<std::path::Path> for CrossPathBuf {
     #[inline]
