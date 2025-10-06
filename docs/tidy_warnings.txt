@@ -62,16 +62,16 @@ line 1 column 4871 - Warning: discarding unexpected </rustdoc-search>
 line 1 column 5166 - Error: <rustdoc-toolbar> is not recognized! Did you mean to enable the custom-tags option?
 line 1 column 5166 - Warning: discarding unexpected <rustdoc-toolbar>
 line 1 column 5183 - Warning: discarding unexpected </rustdoc-toolbar>
-line 15 column 8188 - Warning: missing </span> before <div>
-line 15 column 8241 - Warning: inserting implicit <span>
-line 15 column 8348 - Warning: discarding unexpected </span>
-line 15 column 9291 - Warning: missing </span> before <div>
-line 15 column 9344 - Warning: inserting implicit <span>
-line 15 column 9472 - Warning: discarding unexpected </span>
-line 15 column 10094 - Warning: missing </span> before <div>
-line 15 column 10145 - Warning: inserting implicit <span>
-line 15 column 10275 - Warning: discarding unexpected </span>
-line 15 column 13578 - Warning: <div> isn't allowed in <h3> elements
+line 15 column 8325 - Warning: missing </span> before <div>
+line 15 column 8378 - Warning: inserting implicit <span>
+line 15 column 8485 - Warning: discarding unexpected </span>
+line 15 column 9428 - Warning: missing </span> before <div>
+line 15 column 9481 - Warning: inserting implicit <span>
+line 15 column 9609 - Warning: discarding unexpected </span>
+line 15 column 10231 - Warning: missing </span> before <div>
+line 15 column 10282 - Warning: inserting implicit <span>
+line 15 column 10412 - Warning: discarding unexpected </span>
+line 15 column 13715 - Warning: <div> isn't allowed in <h3> elements
 line 16 column 149 - Warning: discarding unexpected </div>
 line 16 column 1413 - Warning: <div> isn't allowed in <h3> elements
 line 17 column 139 - Warning: discarding unexpected </div>
@@ -86,9 +86,9 @@ line 25 column 146 - Warning: discarding unexpected </div>
 line 25 column 2357 - Warning: <div> isn't allowed in <h3> elements
 line 26 column 155 - Warning: discarding unexpected </div>
 line 1 column 1855 - Warning: trimming empty <button>
-line 15 column 8188 - Warning: trimming empty <span>
-line 15 column 9291 - Warning: trimming empty <span>
-line 15 column 10094 - Warning: trimming empty <span>
+line 15 column 8325 - Warning: trimming empty <span>
+line 15 column 9428 - Warning: trimming empty <span>
+line 15 column 10231 - Warning: trimming empty <span>
 This document has errors that must be fixed before
 using HTML Tidy to generate a tidied up version.
 
