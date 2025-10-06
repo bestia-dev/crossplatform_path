@@ -12,6 +12,8 @@ The TODO section is part of the [README.md](https://github.com/bestia-dev/crossp
 
 - short_string
 
+- update automation
+
 ## Version 2.0.1 (2025-09-28)
 
 - ready-for-use

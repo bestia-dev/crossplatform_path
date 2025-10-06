@@ -4,7 +4,7 @@
 //! # crossplatform_path
 //!
 //! **Crossplatform Path Rust library**  
-//! ***version: 2.0.2 date: 2025-10-06 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+//! ***version: 2.0.8 date: 2025-10-06 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 //!
 //!  ![maintained](https://img.shields.io/badge/maintained-green)
 //!  ![ready-for-use](https://img.shields.io/badge/ready_for_use-green)
@@ -16,11 +16,11 @@
 //!   [![Rust](https://github.com/bestia-dev/crossplatform_path/workflows/rust_fmt_auto_build_test/badge.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //!   ![crossplatform_path](https://bestia.dev/webpage_hit_counter/get_svg_image/1320456497.svg)
 //!
-//! [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-80-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-84-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-227-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //! [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-32-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //! [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-38-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-323-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-327-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //!
 //! Hashtags: #maintained #work-in-progress #rustlang  
 //! My projects on GitHub are more like a tutorial than a finished product: [bestia-dev tutorials](https://github.com/bestia-dev/tutorials_rust_wasm).  
@@ -158,8 +158,8 @@ pub enum Error {
     NoParent(String),
     #[error(r#"The file_name of {0} does not exist."#)]
     NoFileName(String),
-    #[error(r#"char_indices().nth error"#)]
-    CharIndicesNthError(),
+    #[error(r#"char_indices().nth error {0}"#)]
+    CharIndicesNthError(String),
     #[error("I/O error: {path} {source}")]
     IoError {
         #[source]
@@ -537,8 +537,12 @@ impl CrossPathBuf {
         /// It is used for substring, because string slice are counted in bytes and not chars.  \
         ///
         /// If we have multi-byte unicode characters we can get an error if the boundary is not on char boundary.  
-        pub fn byte_pos_from_chars(text: &str, char_pos: usize) -> Result<usize> {
-            Ok(text.char_indices().nth(char_pos).ok_or_else(|| Error::CharIndicesNthError())?.0)
+        fn byte_pos_from_chars(text: &str, char_pos: usize) -> Result<usize> {
+            Ok(text
+                .char_indices()
+                .nth(char_pos)
+                .ok_or_else(|| Error::NoFileName(text.to_string()))?
+                .0)
         }
         if self.cross_path.chars().count() > max_char as usize {
             let half_in_char = (max_char / 2 - 2) as usize;
