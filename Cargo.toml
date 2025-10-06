@@ -1,7 +1,7 @@
 [package]
 name = "crossplatform_path"
 # binary executable does not need to be SemVer, because nobody depends on it
-version = "2.0.8"
+version = "2.1.1"
 description = "Crossplatform Path Rust library"
 authors = ["bestia.dev"]
 homepage = "https://bestia.dev"
@@ -26,7 +26,7 @@ include = [
 # WARNING: Although dependencies in Cargo.toml look like a specific version of the crate, they are just like a caret version (^x.y.z) and actually specify 
 # the minimum version and allow automatic SemVer compatible updates up to a MAJOR increment! Always check the true version with `cargo tree`!
 [dependencies]
-thiserror = "2.0.16"
+thiserror = "2.0.17"
 anyhow="1.0.97"
 
 tracing = "0.1.41"
