@@ -4,7 +4,7 @@
 //! # crossplatform_path
 //!
 //! **Crossplatform Path Rust library**  
-//! ***version: 2.1.1 date: 2025-10-06 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+//! ***version: 3.0.3 date: 2025-10-14 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 //!
 //!  ![maintained](https://img.shields.io/badge/maintained-green)
 //!  ![ready-for-use](https://img.shields.io/badge/ready_for_use-green)
@@ -16,11 +16,11 @@
 //!   [![Rust](https://github.com/bestia-dev/crossplatform_path/workflows/rust_fmt_auto_build_test/badge.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //!   ![crossplatform_path](https://bestia.dev/webpage_hit_counter/get_svg_image/1320456497.svg)
 //!
-//! [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-84-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-227-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-32-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-91-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-234-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-34-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //! [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-38-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-327-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-342-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //!
 //! Hashtags: #maintained #work-in-progress #rustlang  
 //! My projects on GitHub are more like a tutorial than a finished product: [bestia-dev tutorials](https://github.com/bestia-dev/tutorials_rust_wasm).  
@@ -139,6 +139,8 @@
 //! [//youtube.com/@bestia-dev-tutorials](https://youtube.com/@bestia-dev-tutorials)  
 //!
 // endregion: auto_md_to_doc_comments include README.md A //!
+
+use std::ffi::OsStr;
 
 #[cfg(test)]
 mod tests;
@@ -499,26 +501,37 @@ impl CrossPathBuf {
         Ok(file_name)
     }
 
-    /// Extracts the extension (without the leading dot), if possible.  
+    /// Extracts the extension (without the leading dot), if possible.  \
+    ///
+    /// It is different from the std::fs extension() because  \
+    /// it returns an empty string if there is no extension.  \
+    /// It returns Error only if there is no file_name.  
     pub fn extension(&self) -> Result<String> {
-        let file_name = self
+        // return error if there is no file_name
+        let _file_name = self
+            .to_path_buf_current_os()
+            .file_name()
+            .ok_or_else(|| Error::NoFileName(self.cross_path.clone()))?;
+
+        let file_extension = self
             .to_path_buf_current_os()
             .extension()
-            .ok_or_else(|| Error::NoFileName(self.cross_path.clone()))?
+            // return empty string if there is no extension
+            .unwrap_or_else(|| OsStr::new(""))
             .to_string_lossy()
             .to_string();
-        Ok(file_name)
+        Ok(file_extension)
     }
 
     /// Extracts the stem (non-extension) portion of file_name (the final component of the Path).
     pub fn file_stem(&self) -> Result<String> {
-        let file_name = self
+        let file_stem = self
             .to_path_buf_current_os()
             .file_stem()
             .ok_or_else(|| Error::NoFileName(self.cross_path.clone()))?
             .to_string_lossy()
             .to_string();
-        Ok(file_name)
+        Ok(file_stem)
     }
 
     /// Returns the Path without its final component, if there is one.
@@ -530,6 +543,19 @@ impl CrossPathBuf {
                 .ok_or_else(|| Error::NoParent(self.cross_path.clone()))?
                 .to_string_lossy(),
         )
+    }
+
+    /// Returns new object where the extension is replaced.
+    ///
+    /// If the extension did not exist, it is added.
+    pub fn replace_extension(&self, extension: &str) -> Result<Self> {
+        let old_extension = self.extension()?;
+        let dot_separator = if extension.is_empty() { "" } else { "." };
+        let cross_path = format!(
+            "{}{dot_separator}{extension}",
+            self.cross_path.trim_end_matches(&old_extension).trim_end_matches(".")
+        );
+        CrossPathBuf::new(&cross_path)
     }
 
     /// Shorten the crossplatform path to avoid word-wrap for longer paths.

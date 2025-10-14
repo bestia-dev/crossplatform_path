@@ -80,4 +80,9 @@ fn test_07_file_name() {
     assert_eq!(cross_path.file_name().expect("test"), "bar.txt");
     assert_eq!(cross_path.file_stem().expect("test"), "bar");
     assert_eq!(cross_path.extension().expect("test"), "txt");
+
+    let cross_path = cross_path.replace_extension("md").expect("test");
+    assert_eq!(cross_path.file_name().expect("test"), "bar.md");
+    assert_eq!(cross_path.file_stem().expect("test"), "bar");
+    assert_eq!(cross_path.extension().expect("test"), "md");
 }
