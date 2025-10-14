@@ -21,35 +21,35 @@ using HTML Tidy to generate a tidied up version.
 ./docs/crossplatform_path/struct.CrossPathBuf.html
 Document: "2" is not a file!
 
-line 1 column 6574 - Error: <rustdoc-search> is not recognized! Did you mean to enable the custom-tags option?
-line 1 column 6574 - Warning: discarding unexpected <rustdoc-search>
-line 1 column 6590 - Warning: discarding unexpected </rustdoc-search>
-line 1 column 6896 - Error: <rustdoc-toolbar> is not recognized! Did you mean to enable the custom-tags option?
-line 1 column 6896 - Warning: discarding unexpected <rustdoc-toolbar>
-line 1 column 6913 - Warning: discarding unexpected </rustdoc-toolbar>
-line 73 column 3968 - Warning: <div> isn't allowed in <h3> elements
-line 74 column 149 - Warning: discarding unexpected </div>
-line 74 column 1413 - Warning: <div> isn't allowed in <h3> elements
-line 75 column 139 - Warning: discarding unexpected </div>
-line 75 column 1387 - Warning: <div> isn't allowed in <h3> elements
-line 76 column 139 - Warning: discarding unexpected </div>
-line 76 column 1413 - Warning: <div> isn't allowed in <h3> elements
-line 77 column 136 - Warning: discarding unexpected </div>
-line 77 column 860 - Warning: missing </span> before <div>
-line 77 column 911 - Warning: inserting implicit <span>
-line 77 column 1029 - Warning: discarding unexpected </span>
-line 78 column 486 - Warning: <div> isn't allowed in <h3> elements
-line 79 column 146 - Warning: discarding unexpected </div>
-line 82 column 469 - Warning: <div> isn't allowed in <h3> elements
-line 83 column 136 - Warning: discarding unexpected </div>
-line 83 column 2589 - Warning: <div> isn't allowed in <h3> elements
-line 84 column 271 - Warning: discarding unexpected </div>
-line 84 column 1595 - Warning: <div> isn't allowed in <h3> elements
-line 85 column 146 - Warning: discarding unexpected </div>
-line 85 column 2357 - Warning: <div> isn't allowed in <h3> elements
-line 86 column 155 - Warning: discarding unexpected </div>
+line 1 column 6666 - Error: <rustdoc-search> is not recognized! Did you mean to enable the custom-tags option?
+line 1 column 6666 - Warning: discarding unexpected <rustdoc-search>
+line 1 column 6682 - Warning: discarding unexpected </rustdoc-search>
+line 1 column 6988 - Error: <rustdoc-toolbar> is not recognized! Did you mean to enable the custom-tags option?
+line 1 column 6988 - Warning: discarding unexpected <rustdoc-toolbar>
+line 1 column 7005 - Warning: discarding unexpected </rustdoc-toolbar>
+line 78 column 3968 - Warning: <div> isn't allowed in <h3> elements
+line 79 column 149 - Warning: discarding unexpected </div>
+line 79 column 1413 - Warning: <div> isn't allowed in <h3> elements
+line 80 column 139 - Warning: discarding unexpected </div>
+line 80 column 1387 - Warning: <div> isn't allowed in <h3> elements
+line 81 column 139 - Warning: discarding unexpected </div>
+line 81 column 1413 - Warning: <div> isn't allowed in <h3> elements
+line 82 column 136 - Warning: discarding unexpected </div>
+line 82 column 860 - Warning: missing </span> before <div>
+line 82 column 911 - Warning: inserting implicit <span>
+line 82 column 1029 - Warning: discarding unexpected </span>
+line 83 column 486 - Warning: <div> isn't allowed in <h3> elements
+line 84 column 146 - Warning: discarding unexpected </div>
+line 87 column 469 - Warning: <div> isn't allowed in <h3> elements
+line 88 column 136 - Warning: discarding unexpected </div>
+line 88 column 2589 - Warning: <div> isn't allowed in <h3> elements
+line 89 column 271 - Warning: discarding unexpected </div>
+line 89 column 1595 - Warning: <div> isn't allowed in <h3> elements
+line 90 column 146 - Warning: discarding unexpected </div>
+line 90 column 2357 - Warning: <div> isn't allowed in <h3> elements
+line 91 column 155 - Warning: discarding unexpected </div>
 line 1 column 1882 - Warning: trimming empty <button>
-line 77 column 860 - Warning: trimming empty <span>
+line 82 column 860 - Warning: trimming empty <span>
 This document has errors that must be fixed before
 using HTML Tidy to generate a tidied up version.
 
