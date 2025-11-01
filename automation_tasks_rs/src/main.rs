@@ -3,9 +3,10 @@
 // region: library and modules with basic automation tasks
 
 mod build_cli_bin_mod;
+mod build_cli_bin_musl_mod;
 mod build_cli_bin_win_mod;
-mod build_wasm_mod;
 mod build_lib_mod;
+mod build_wasm_mod;
 mod cargo_auto_github_api_mod;
 mod encrypt_decrypt_with_ssh_key_mod;
 mod generic_functions_mod;
@@ -27,7 +28,7 @@ use cl::CargoTomlPublicApiMethods;
 
 // region: library with basic automation tasks
 
-///main returns ExitCode
+/// The main() function returns ExitCode.
 fn main() -> std::process::ExitCode {
     match main_returns_anyhow_result() {
         Err(err) => {
@@ -39,12 +40,12 @@ fn main() -> std::process::ExitCode {
     }
 }
 
-/// main() returns anyhow::Result
+/// The main_returns_anyhow_result() function returns anyhow::Result.
 fn main_returns_anyhow_result() -> anyhow::Result<()> {
     gn::tracing_init()?;
     cl::exit_if_not_run_in_rust_project_root_directory();
-    ende::github_api_token_with_oauth2_mod::github_api_config_initialize();
-    ende::crates_io_api_token_mod::crates_io_config_initialize();
+    ende::github_api_token_with_oauth2_mod::github_api_config_initialize()?;
+    ende::crates_io_api_token_mod::crates_io_config_initialize()?;
     // get CLI arguments
     let mut args = std::env::args();
     // the zero argument is the name of the program
@@ -55,7 +56,7 @@ fn main_returns_anyhow_result() -> anyhow::Result<()> {
 
 // region: match, help and completion
 
-/// match arguments and call tasks functions
+/// Match arguments and call tasks functions.
 fn match_arguments_and_call_tasks(mut args: std::env::Args) -> anyhow::Result<()> {
     // the first argument is the user defined task: (no argument for help), build, release,...
     let arg_1 = args.next();
@@ -91,7 +92,7 @@ fn match_arguments_and_call_tasks(mut args: std::env::Args) -> anyhow::Result<()
     Ok(())
 }
 
-/// write a comprehensible help for user defined tasks
+/// Write a comprehensible help for user defined tasks.
 fn print_help() -> anyhow::Result<()> {
     println!(
         r#"
@@ -131,7 +132,7 @@ fn print_help() -> anyhow::Result<()> {
     Ok(())
 }
 
-/// all example commands in one place
+/// All example commands in one place.
 fn print_examples_cmd() {
     /*
         println!(
@@ -176,7 +177,7 @@ fn completion() -> anyhow::Result<()> {
 
 // region: tasks
 
-/// cargo build
+/// Run 'cargo build' and appropriate functions.
 fn task_build() -> anyhow::Result<()> {
     let cargo_toml = crate::build_cli_bin_mod::task_build()?;
     println!(
@@ -191,7 +192,7 @@ fn task_build() -> anyhow::Result<()> {
     Ok(())
 }
 
-/// cargo build --release
+/// Run 'cargo build --release' and appropriate functions.
 fn task_release() -> anyhow::Result<()> {
     let cargo_toml = crate::build_cli_bin_mod::task_release()?;
 
@@ -207,7 +208,7 @@ fn task_release() -> anyhow::Result<()> {
     Ok(())
 }
 
-/// cargo doc, then copies to /docs/ folder, because this is a GitHub standard folder
+/// Run 'cargo doc', then copy to /docs/ folder, because this is a GitHub standard folder.
 fn task_doc() -> anyhow::Result<()> {
     ts::task_doc()?;
     // message to help user with next move
@@ -224,7 +225,7 @@ fn task_doc() -> anyhow::Result<()> {
     Ok(())
 }
 
-/// cargo test
+/// Run 'cargo test'.
 fn task_test() -> anyhow::Result<()> {
     cl::run_shell_command_static("cargo test")?;
     println!(
@@ -237,7 +238,7 @@ fn task_test() -> anyhow::Result<()> {
     Ok(())
 }
 
-/// commit and push
+/// Run 'commit' and 'push'. Separate docs and other updates.
 fn task_commit_and_push(arg_2: Option<String>) -> anyhow::Result<()> {
     ts::task_commit_and_push(arg_2)?;
     println!(
@@ -249,7 +250,7 @@ fn task_commit_and_push(arg_2: Option<String>) -> anyhow::Result<()> {
     Ok(())
 }
 
-/// publish to crates.io and git tag
+/// Publish to crates.io and git tag.
 fn task_publish_to_crates_io() -> anyhow::Result<()> {
     let (_tag_name_version, package_name, version) = crate::build_lib_mod::task_publish_to_crates_io()?;
 
@@ -285,7 +286,7 @@ fn task_publish_to_crates_io() -> anyhow::Result<()> {
     Ok(())
 }
 
-/// create a new release on github and uploads binary executables
+/// Create a new release on github and uploads binary executables.
 fn task_github_new_release() -> anyhow::Result<()> {
     ts::task_github_new_release()?;
     println!(
