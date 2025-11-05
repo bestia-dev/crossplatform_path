@@ -10,6 +10,8 @@ The TODO section is part of the [README.md](https://github.com/bestia-dev/crossp
 
 ## Unreleased
 
+- copy, rename, remove
+
 ## Version 3.0.3 (2025-10-14)
 
 - replace_extension

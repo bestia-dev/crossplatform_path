@@ -4,7 +4,7 @@
 //! # crossplatform_path
 //!
 //! **Crossplatform Path Rust library**  
-//! ***version: 3.0.3 date: 2025-10-14 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+//! ***version: 4.0.1 date: 2025-11-05 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 //!
 //!  ![maintained](https://img.shields.io/badge/maintained-green)
 //!  ![ready-for-use](https://img.shields.io/badge/ready_for_use-green)
@@ -17,10 +17,10 @@
 //!   ![crossplatform_path](https://bestia.dev/webpage_hit_counter/get_svg_image/1320456497.svg)
 //!
 //! [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-91-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-234-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-255-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //! [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-34-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //! [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-38-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
-//! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-342-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
+//! [![Lines in tests](https://img.shields.io/badge/Lines_in_tests-413-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
 //!
 //! Hashtags: #maintained #work-in-progress #rustlang  
 //! My projects on GitHub are more like a tutorial than a finished product: [bestia-dev tutorials](https://github.com/bestia-dev/tutorials_rust_wasm).  
@@ -301,6 +301,14 @@ impl CrossPathBuf {
         Ok(CrossPathBuf { cross_path })
     }
 
+    /// Creates a new CrossPathBuf from &Path.  \
+    pub fn from_path(path: &std::path::Path) -> Result<Self> {
+        let str_path = path
+            .to_str()
+            .ok_or_else(|| Error::InvalidCharacter(path.to_string_lossy().to_string()))?;
+        Self::new(str_path)
+    }
+
     /// Converts crossplatform path into Windows path.  \
     ///
     /// '~'     will be transformed into home  \
@@ -409,28 +417,37 @@ impl CrossPathBuf {
     ///
     /// This is a convenience function based on std::fs::read_to_string  
     pub fn read_to_string(&self) -> Result<String> {
-        match std::fs::read_to_string(self.to_path_buf_current_os()) {
-            Ok(content) => Ok(content),
-            Err(err) => Err(Error::IoError {
-                source: err,
-                path: self.cross_path.to_string(),
-            }),
-        }
+        let content = std::fs::read_to_string(self.to_path_buf_current_os()).map_err(|err| Error::IoError {
+            source: (err),
+            path: (self.cross_path.clone()),
+        })?;
+        Ok(content)
     }
 
-    /// Writes a slice as the entire contents of a file.  \
+    /// Writes a string slice as the entire contents of a file.  \
     ///
     /// This function will create a file if it does not exist, and will entirely replace its contents if it does.  \
     /// It creates the full path directory, if path does not exist.  
     pub fn write_str_to_file(&self, content: &str) -> Result<()> {
         self.create_dir_all_for_file()?;
-        match std::fs::write(self.to_path_buf_current_os(), content) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(Error::IoError {
-                source: err,
-                path: self.cross_path.clone(),
-            }),
-        }
+        std::fs::write(self.to_path_buf_current_os(), content).map_err(|err| Error::IoError {
+            source: (err),
+            path: (self.cross_path.clone()),
+        })?;
+        Ok(())
+    }
+
+    /// Writes a byte slice as the entire contents of a file.  \
+    ///
+    /// This function will create a file if it does not exist, and will entirely replace its contents if it does.  \
+    /// It creates the full path directory, if path does not exist.  
+    pub fn write_bytes_to_file(&self, content: &[u8]) -> Result<()> {
+        self.create_dir_all_for_file()?;
+        std::fs::write(self.to_path_buf_current_os(), content).map_err(|err| Error::IoError {
+            source: (err),
+            path: (self.cross_path.clone()),
+        })?;
+        Ok(())
     }
 
     /// Recursively create this path as directory and all of its parent components if they are missing.  \
@@ -438,13 +455,11 @@ impl CrossPathBuf {
     /// The cross_path must represent a directory and not a file for this command.
     /// This function is not atomic. If it returns an error, any parent components it was able to create will remain.   
     pub fn create_dir_all(&self) -> Result<()> {
-        match std::fs::create_dir_all(self.to_path_buf_current_os()) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(Error::IoError {
-                source: err,
-                path: self.cross_path.clone(),
-            }),
-        }
+        std::fs::create_dir_all(self.to_path_buf_current_os()).map_err(|err| Error::IoError {
+            source: (err),
+            path: (self.cross_path.clone()),
+        })?;
+        Ok(())
     }
 
     /// Recursively create the parent directory of a file and all of its parent components if they are missing.  \
@@ -454,13 +469,11 @@ impl CrossPathBuf {
     pub fn create_dir_all_for_file(&self) -> Result<()> {
         let path = self.to_path_buf_current_os();
         let parent = path.parent().ok_or_else(|| Error::NoParent(self.cross_path.clone()))?;
-        match std::fs::create_dir_all(parent) {
-            Ok(_) => Ok(()),
-            Err(err) => Err(Error::IoError {
-                source: err,
-                path: self.cross_path.to_string(),
-            }),
-        }
+        std::fs::create_dir_all(parent).map_err(|err| Error::IoError {
+            source: (err),
+            path: (self.cross_path.clone()),
+        })?;
+        Ok(())
     }
 
     /// Returns a CrossPathBuf without leading start slash (repeatedly removed).  
@@ -582,6 +595,85 @@ impl CrossPathBuf {
         } else {
             Ok(self.cross_path.to_string())
         }
+    }
+
+    /// Decompress tar.gz into destination folder.  \
+    ///
+    /// It creates the full path destination folder, if path does not exist.  
+    pub fn decompress_tar_gz(&self, destination_folder: &CrossPathBuf) -> Result<()> {
+        destination_folder.create_dir_all()?;
+
+        let tar_gz = std::fs::File::open(self.to_path_buf_current_os()).map_err(|err| Error::IoError {
+            source: (err),
+            path: (self.cross_path.clone()),
+        })?;
+        let tar = flate2::read::GzDecoder::new(tar_gz);
+        let mut archive = tar::Archive::new(tar);
+        archive
+            .unpack(destination_folder.to_path_buf_current_os())
+            .map_err(|err| Error::IoError {
+                source: (err),
+                path: (self.cross_path.clone()),
+            })?;
+
+        Ok(())
+    }
+
+    /// Removes a file from the filesystem.  \
+    ///
+    /// Note that there is no guarantee that the file is immediately deleted (e.g., depending on platform, other open file descriptors may prevent immediate removal).  
+    pub fn remove_file(&self) -> Result<()> {
+        std::fs::remove_file(self.to_path_buf_current_os()).map_err(|err| Error::IoError {
+            source: (err),
+            path: (self.cross_path.clone()),
+        })?;
+
+        Ok(())
+    }
+
+    /// Removes a directory at this path, after removing all its contents. Use carefully!  \
+    ///
+    /// This function does not follow symbolic links and it will simply remove the symbolic link itself.
+    /// DIFFERENCE from std::fs::remove_dir_all: The directory you are deleting does not need to exist.
+    pub fn remove_dir_all(&self) -> Result<()> {
+        if std::fs::exists(self.to_path_buf_current_os()).map_err(|err| Error::IoError {
+            source: (err),
+            path: (self.cross_path.clone()),
+        })? {
+            std::fs::remove_dir_all(self.to_path_buf_current_os()).map_err(|err| Error::IoError {
+                source: (err),
+                path: (self.cross_path.clone()),
+            })?;
+        }
+        Ok(())
+    }
+
+    /// Copies the contents of one file to another file.  \
+    ///
+    /// This function will also copy the permission bits of the original file to the destination file.
+    /// It creates the full path destination folder, if path does not exist.  
+    /// DIFFERENCE from std::fs::copy If the source and destination is the same nothing happens.
+    pub fn copy_file_to_file(&self, destination_file: &CrossPathBuf) -> Result<()> {
+        if self.to_path_buf_current_os() != destination_file.to_path_buf_current_os() {
+            destination_file.create_dir_all_for_file()?;
+            std::fs::copy(self.to_path_buf_current_os(), destination_file.to_path_buf_current_os()).map_err(|err| Error::IoError {
+                source: (err),
+                path: (self.cross_path.clone()),
+            })?;
+        }
+        Ok(())
+    }
+
+    /// Renames a file or directory to a new name, replacing the original file if to already exists.  \
+    pub fn rename_or_move(&self, destination_file: &CrossPathBuf) -> Result<()> {
+        if self.to_path_buf_current_os() != destination_file.to_path_buf_current_os() {
+            destination_file.create_dir_all_for_file()?;
+            std::fs::rename(self.to_path_buf_current_os(), destination_file.to_path_buf_current_os()).map_err(|err| Error::IoError {
+                source: (err),
+                path: (self.cross_path.clone()),
+            })?;
+        }
+        Ok(())
     }
 }
 

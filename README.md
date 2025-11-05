@@ -6,7 +6,7 @@
 [//]: # (auto_cargo_toml_to_md start)
 
 **Crossplatform Path Rust library**  
-***version: 3.0.3 date: 2025-10-14 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
+***version: 4.0.1 date: 2025-11-05 author: [bestia.dev](https://bestia.dev) repository: [GitHub](https://github.com/bestia-dev/crossplatform_path)***
 
  ![maintained](https://img.shields.io/badge/maintained-green)
  ![ready-for-use](https://img.shields.io/badge/ready_for_use-green)
@@ -22,10 +22,10 @@
 
 [//]: # (auto_lines_of_code start)
 [![Lines in Rust code](https://img.shields.io/badge/Lines_in_Rust-91-green.svg)](https://github.com/bestia-dev/crossplatform_path/)
-[![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-234-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in Doc comments](https://img.shields.io/badge/Lines_in_Doc_comments-255-blue.svg)](https://github.com/bestia-dev/crossplatform_path/)
 [![Lines in Comments](https://img.shields.io/badge/Lines_in_comments-34-purple.svg)](https://github.com/bestia-dev/crossplatform_path/)
 [![Lines in examples](https://img.shields.io/badge/Lines_in_examples-38-yellow.svg)](https://github.com/bestia-dev/crossplatform_path/)
-[![Lines in tests](https://img.shields.io/badge/Lines_in_tests-342-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
+[![Lines in tests](https://img.shields.io/badge/Lines_in_tests-413-orange.svg)](https://github.com/bestia-dev/crossplatform_path/)
 
 [//]: # (auto_lines_of_code end)
 
