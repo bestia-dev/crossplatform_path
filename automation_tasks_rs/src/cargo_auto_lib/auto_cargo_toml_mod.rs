@@ -2,7 +2,10 @@
 
 //! Functions to get data from Cargo.toml.
 
-use crate::cargo_auto_lib::error_mod::{Error, Result};
+use crate::{
+    cargo_auto_lib::error_mod::{Error, Result},
+    utils_mod::{pos, ResultLogError},
+};
 use lazy_static::lazy_static;
 use regex::*;
 
@@ -25,21 +28,22 @@ pub struct CargoToml {
 impl crate::cargo_auto_lib::public_api_mod::CargoTomlPublicApiMethods for CargoToml {
     /// read Cargo.toml, for workspaces it is the Cargo.toml of the first member
     fn read() -> Result<Self> {
-        let absolute_path = std::path::absolute("Cargo.toml")?;
-        let cargo_toml_workspace_maybe = cargo_toml::Manifest::from_path(absolute_path)?;
+        let absolute_path = std::path::absolute("Cargo.toml").log(pos!())?;
+        let cargo_toml_workspace_maybe = cargo_toml::Manifest::from_path(absolute_path).log(pos!())?;
         let cargo_toml_main = match &cargo_toml_workspace_maybe.workspace {
             None => cargo_toml_workspace_maybe.clone(),
             Some(workspace) => {
                 let main_member = &workspace.members[0];
-                let absolute_path = std::path::absolute(format!("{}/Cargo.toml", main_member))?;
+                let absolute_path = std::path::absolute(format!("{}/Cargo.toml", main_member)).log(pos!())?;
                 // return cargo_main
-                cargo_toml::Manifest::from_path(absolute_path)?
+                cargo_toml::Manifest::from_path(absolute_path).log(pos!())?
             }
         };
         let package = cargo_toml_main
             .package
             .as_ref()
-            .ok_or_else(|| Error::ErrorFromStr("package is None"))?
+            .ok_or_else(|| Error::ErrorFromStr("package is None"))
+            .log(pos!())?
             .to_owned();
         Ok(CargoToml {
             cargo_toml_workspace_maybe,
